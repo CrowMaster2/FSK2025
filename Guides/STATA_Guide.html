@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komplet STATA Guide: Onkologi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PrismJS for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        .code-header { display: flex; justify-content: space-between; align-items: center; background-color: #2d2d2d; color: #e5e7eb; padding: 0.5rem 1rem; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; font-size: 0.875rem; }
+        pre[class*="language-"] { margin-top: 0 !important; border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+        .sidebar-link.active { background-color: #003d73; color: white; border-radius: 0.375rem; }
+        .cmd-table th { background-color: #f3f4f6; text-align: left; padding: 0.75rem; font-size: 0.875rem; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; }
+        .cmd-table td { padding: 0.75rem; font-size: 0.875rem; border-bottom: 1px solid #e5e7eb; }
+        .cmd-table code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background-color: #f3f4f6; padding: 2px 4px; border-radius: 4px; }
+        html { scroll-behavior: smooth; }
+        .step-circle { background-color: #0055a5; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        
+        .syntax-box { background-color: #f8f9fa; border: 1px solid #dee2e6; border-left: 4px solid #6c757d; padding: 1rem; margin-top: 1.5rem; border-radius: 0.25rem; font-size: 0.9em; }
+        .syntax-box .title { font-weight: bold; color: #495057; margin-bottom: 0.5rem; display: block; }
+        .syntax-box code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+        
+        .pro-tip { background-color: #e0f2fe; border-left: 4px solid #0ea5e9; padding: 1rem; margin-top: 1.5rem; margin-bottom: 1.5rem; border-radius: 0.25rem; }
+        .pro-tip h4 { color: #0369a1; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden bg-blue-900 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
+        <h1 class="text-xl font-bold">STATA Guide</h1>
+        <button id="mobile-menu-btn" class="text-white hover:text-gray-200 focus:outline-none">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+    </div>
+
+    <div class="flex flex-col lg:flex-row min-h-screen"> 
+        
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="hidden lg:block w-full lg:w-72 bg-white border-r border-gray-200 h-screen sticky top-0 overflow-y-auto z-40">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-8 text-blue-900">
+                    <i class="fa-solid fa-s text-4xl"></i>
+                    <span class="font-bold text-2xl tracking-tight">STATA Guide</span>
+                </div>
+                
+                <nav class="space-y-2">
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Introduktion</p>
+                    <a href="#installation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-download w-5"></i> Installation</a>
+                    <a href="#stata-intro" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-display w-5"></i> STATA Brugerflade</a>
+                    <a href="#workflow" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-person-chalkboard w-5"></i> Do-filer & Workflow</a>
+                    
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Databehandling</p>
+                    <a href="#loading" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-folder-open w-5"></i> Indlæs Data</a>
+                    <a href="#manipulation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-calculator w-5"></i> Datamanipulation</a>
+
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Analyse & Visualisering</p>
+                    <a href="#descriptive" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-chart-pie w-5"></i> Deskriptiv Statistik</a>
+                    <a href="#tables" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-table w-5"></i> Tabeller (Table 1)</a>
+                    <a href="#statistics" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-scale-balanced w-5"></i> Statistiske Tests</a>
+                    <a href="#correlation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-link w-5"></i> Korrelation</a>
+                    <a href="#survival" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-heart-pulse w-5"></i> Overlevelsesanalyse</a>
+                    <a href="#graphics" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-chart-line w-5"></i> Grafik & Plots</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 lg:p-8 max-w-5xl mx-auto w-full">
+            
+            <div class="mb-10">
+                <h1 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4">Komplet STATA Guide for Onkologer</h1>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    En guide til Stata, der dækker alt fra installation til analyse og grafik, med fokus på kommando-syntaks for reproducerbar forskning.
+                </p>
+            </div>
+
+            <section id="installation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Installation af STATA</h2>
+                <p class="mb-4 text-gray-600">Stata er kommerciel software, der kræver en licens. De fleste universiteter og hospitaler stiller licenser til rådighed for ansatte.</p>
+                <ol class="list-decimal list-inside space-y-2 pl-4">
+                    <li>Kontakt din lokale IT-afdeling eller software-ansvarlige for at få en licensnøgle og et download-link.</li>
+                    <li>Download installationsfilen fra StataCorp's hjemmeside eller det link, du har fået.</li>
+                    <li>Kør installationen og følg vejledningen. Indtast dine licensoplysninger (navn, organisation, serienummer, kode og autorisation) naar du bliver bedt om det.</li>
+                </ol>
+            </section>
+
+            <section id="stata-intro" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">STATA Brugerflade</h2>
+                <p class="mb-4 text-gray-600">STATA's brugerflade er bygget op omkring kommandoer og består af flere nøglevinduer:</p>
+                <img src="https://i.imgur.com/sY9vYyW.png" alt="STATA Layout" class="rounded-lg shadow-md mb-6 border border-gray-200">
+                <ul class="list-disc list-inside space-y-2 pl-4 mb-4">
+                    <li><strong>Command:</strong> Nederst i midten. Her skriver du dine kommandoer.</li>
+                    <li><strong>Results:</strong> Det store vindue i midten. Her vises output fra dine kommandoer.</li>
+                    <li><strong>Review:</strong> Til venstre. En historik over alle de kommandoer, du har kørt. Du kan klikke på en for at genindsætte den i Command-vinduet.</li>
+                    <li><strong>Variables:</strong> Til højre. En liste over alle variable i dit nuværende datasæt.</li>
+                    <li><strong>Properties:</strong> Også til højre. Viser egenskaber for dine variable og dit datasæt.</li>
+                </ul>
+            </section>
+
+            <section id="workflow" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Do-filer: Den Korrekte Arbejdsgang</h2>
+                <p class="mb-4 text-gray-600">Selvom du kan skrive kommandoer direkte i Command-vinduet, er den bedste praksis at skrive dem i en <strong>Do-fil</strong>. En Do-fil er en simpel tekstfil (med endelsen <code>.do</code>), der indeholder alle dine kommandoer.</p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg">
+                    <h4 class="font-bold">Start altid med en Do-fil</h4>
+                    <p class="mt-2">Åbn Do-fil editoren ved at klikke på ikonet "New Do-file Editor" (ligner en notesblok med en blyant) eller ved at skrive <code>doedit</code> i Command-vinduet.</p>
+                    <p class="mt-2"><strong>Fordele:
+                        </strong>
+                        <ul class="list-disc list-inside pl-4">
+                            <li><strong>Dokumentation:</strong> Du har en præcis log over hele din analyse.</li>
+                            <li><strong>Reproducerbarhed:</strong> Du kan gemme din Do-fil og genkøre analysen præcis som den var, måneder senere.</li>
+                            <li><strong>Fejlretning:</strong> Det er nemt at finde og rette fejl i en Do-fil og genkøre kun den nødvendige del af koden.</li>
+                        </ul>
+                    </p>
+                    <p class="mt-2">For at køre kode fra en Do-fil, markerer du linjerne og klikker på "Execute (do)" knappen i toppen af Do-fil editoren.</p>
+                </div>
+            </section>
+
+            <section id="loading" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Indlæs Data fra Excel</h2>
+                <p class="mb-4 text-gray-600">STATA kan nemt importere data fra Excel. Det er god praksis at rydde STATA's hukommelse først med <code>clear</code> og at sætte din arbejdsmappe med <code>cd</code>.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>STATA Do-file</span></div>
+<pre><code class="language-stata">* Sæt din arbejdsmappe (hvor dine datafiler ligger)
+cd "C:\sti\til\din\mappe"
+
+* Ryd hukommelsen for at starte på en frisk
+clear
+
+* Importer data fra en Excel-fil
+* 'firstrow' fortæller STATA, at den første række indeholder variabelnavne
+import excel "min_datafil.xlsx", sheet("Ark1") firstrow
+
+* For at se data:
+browse
+
+* For at se variabel-egenskaber:
+describe
+</code></pre>
+                </div>
+            </section>
+
+            <section id="manipulation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Datamanipulation</h2>
+                <p class="mb-4 text-gray-600">Oprettelse og ændring af variable er fundamentalt i STATA.</p>
+                
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">Oprette nye variable (<code>generate</code>)</h3>
+                <p class="mb-2 text-gray-600">Brug <code>generate</code> (eller kortere: <code>gen</code>) til at lave nye variable.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>STATA Do-file</span></div>
+<pre><code class="language-stata">* Beregn BMI fra 'vaegt_kg' og 'hoejde_m'
+gen bmi = vaegt_kg / (hoejde_m^2)
+
+* Beregn alder ved diagnose (datoer er i dage siden 1/1/1960 i STATA)
+* Først, sørg for at dine dato-variable er i STATA's datoformat
+* gen diagnose_dato_stata = date(diagnose_dato_string, "YMD")
+* format %td diagnose_dato_stata
+gen alder_ved_diagnose = (diagnose_dato - fodselsdato) / 365.25
+</code></pre>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">Kategorisere en variabel (<code>generate</code> & <code>replace</code>)</h3>
+                <p class="mb-2 text-gray-600">Den mest robuste metode er at generere en ny variabel og derefter erstatte værdierne baseret på betingelser.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>STATA Do-file</span></div>
+<pre><code class="language-stata">* Opret en ny variabel 'alders_gruppe'
+gen alders_gruppe = . // Start med at sætte alle værdier til missing
+replace alders_gruppe = 1 if alder_ved_diagnose <= 65
+replace alders_gruppe = 2 if alder_ved_diagnose > 65 & alder_ved_diagnose != .
+
+* Tilføj labels for at gøre output læseligt
+label define alders_gruppe_label 1 "65 eller yngre" 2 "Over 65"
+label values alders_gruppe alders_gruppe_label
+</code></pre>
+                </div>
+            </section>
+
+            <section id="descriptive" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Deskriptiv Statistik</h2>
+                <p class="mb-2 text-gray-600">Brug <code>summarize</code> for kontinuerlige variable og <code>tabulate</code> for kategoriske.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>STATA Do-file</span></div>
+<pre><code class="language-stata">* Få frekvenstabel for behandlingsgrupper
+tabulate behandling_faktor
+
+* Få gennemsnit, SD, etc. for alder
+summarize alder_ved_diagnose
+
+* For flere detaljer (median, percentiler)
+summarize alder_ved_diagnose, detail
+</code></pre>
+                </div>
+            </section>
+
+            <section id="tables" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Tabeller ("Table 1")</h2>
+                <p class="mb-2 text-gray-600">At lave en "Table 1" i STATA kræver ofte community-bidragede pakker. En populær en er <code>table1_mc</code>. Du installerer den én gang med <code>ssc install table1_mc</code>.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>STATA Do-file</span></div>
+<pre><code class="language-stata">* Installer pakken (kun nødvendigt én gang)
+* ssc install table1_mc
+
+* Lav en Table 1, der sammenligner alder og køn på tværs af behandlingsgrupper
+table1_mc, by(behandling_faktor) vars(alder_ved_diagnose contn | køn cat)
+</code></pre>
+                </div>
+            </section>
+
+            <section id="statistics" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Statistiske Tests</h2>
+                
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">T-test (Kontinuert vs. Kategorisk)</h3>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>STATA Do-file</span></div>
+<pre><code class="language-stata">* Sammenlign gennemsnitlig alder mellem behandlingsgrupper
+ttest alder_ved_diagnose, by(behandling_faktor)
+</code></pre>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">Chi-Square Test (Kategorisk vs. Kategorisk)</h3>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>STATA Do-file</span></div>
+<pre><code class="language-stata">* Test for sammenhæng mellem behandling og aldersgruppe
+tabulate behandling_faktor alders_gruppe, chi2
+</code></pre>
+                </div>
+            </section>
+
+            <section id="correlation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Korrelation</h2>
+                <p class="mb-2 text-gray-600">Test for lineær sammenhæng mellem to kontinuerlige variable.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>STATA Do-file</span></div>
+<pre><code class="language-stata">* Beregn korrelation mellem alder og tumorstørrelse, og vis p-værdi
+pwcorr alder_ved_diagnose tumor_stoerrelse, sig
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Section: Survival Analysis -->
+            <section id="survival" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-cyan-100 text-cyan-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-heart-pulse"></i></span>
+                    Overlevelsesanalyse: En Komplet Arbejdsgang
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Denne sektion viser en komplet arbejdsgang for overlevelsesanalyse i STATA, fra rådata til en færdig, publikationsklar graf. Vi bruger generiske variabelnavne, som du kan erstatte med dine egne.
+                </p>
+
+                <div class="pro-tip mb-8">
+                    <h4><i class="fa-solid fa-lightbulb mr-2"></i>Forudsætninger for dine data</h4>
+                    <p class="text-sky-800 mt-2">For at følge denne guide, skal dit datasæt (vi kalder det <code>mit_data</code>) indeholde:</p>
+                    <ul class="list-disc list-inside text-sky-800 mt-2 pl-4">
+                        <li>En <strong>startdato</strong> (f.eks. <code>diagnose_dato</code>) og en <strong>slutdato</strong> (f.eks. <code>sidste_opfølgning_dato</code>). Disse skal være i STATA's datoformat (dage siden 01jan1960).</li>
+                        <li>En <strong>event-variabel</strong> (f.eks. <code>dødsfald</code>), som er numerisk (typisk <strong>1</strong> for event/død, <strong>0</strong> for censureret).</li>
+                        <li>En <strong>gruppe-variabel</strong> (f.eks. <code>behandlingsgruppe</code>), som du vil sammenligne.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 1: Forberedelse af Data</h3>
+                <p class="text-sm text-gray-600 mb-2">Det første skridt er at beregne overlevelsestiden. STATA's datoer er blot tal, så du kan trække dem fra hinanden direkte.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-8">
+                    <div class="code-header"><span>STATA Do-file: Databehandling</span></div>
+<pre><code class="language-stata">* Antag at 'start_date' og 'end_date' er i STATA's datoformat
+* Hvis de er tekst, konverter dem først: gen start_date_num = date(start_date_str, "YMD")
+
+* 1. Beregn overlevelsestid i dage
+gen overlevelses_tid_dage = end_date - start_date
+
+* 2. Sørg for at din gruppe-variabel har labels for pænere grafer
+label define gruppe_label 0 "Kontrol" 1 "Behandling A"
+label values factor_one gruppe_label
+</code></pre>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 2: Definer Overlevelsesdata (<code>stset</code>)</h3>
+                <p class="text-sm text-gray-600 mb-2">Dette er det vigtigste trin i STATA. Du erklærer dit datasæt som "survival-time data". Dette skal gøres én gang, før du kan bruge de andre <code>st</code>-kommandoer.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+<pre><code class="language-stata">* stset [tidsvariabel], failure([event_variabel]==[værdi for event])
+* Her fortæller vi STATA, at 'overlevelses_tid_dage' er tiden,
+* og at et "failure" (event) sker, når variablen 'event' er lig med 1.
+stset overlevelses_tid_dage, failure(event == 1)
+</code></pre>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 3: Få Nøgletal (Median og 1-års Overlevelse)</h3>
+                <p class="text-sm text-gray-600 mb-2">Brug kommandoen <code>sts list</code> til at få en detaljeret tabel med overlevelsessandsynligheder, inklusiv median og overlevelse ved specifikke tidspunkter.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+<pre><code class="language-stata">* Få overlevelsestabel for grupperne defineret i 'factor_one'
+sts list, by(factor_one)
+
+* For at få 1-års overlevelse (365 dage), se på rækken for t=365
+* Median overlevelse (50-percentil) vises også i tabellen med CI.
+</code></pre>
+                </div>
+                 <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mb-8">
+                    <h4 class="font-bold"><i class="fa-solid fa-circle-info mr-2"></i>Aflæsning af <code>sts list</code></h4>
+                    <p class="mt-2">Outputtet fra <code>sts list</code> viser en tabel for hver gruppe. Find den række, hvor "Percent Survival" er tættest på 50% for at finde medianen. STATA giver dig også en opsummering med "50% percentile" og dens 95% CI.</p>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 4: Log-Rank Testen</h3>
+                <p class="text-sm text-gray-600 mb-2">For at formelt teste om kurverne er forskellige, bruges <code>sts test</code>.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+<pre><code class="language-stata">* Udfør log-rank testen for at sammenligne grupperne i 'factor_one'
+sts test factor_one, logrank
+</code></pre>
+                </div>
+                 <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mb-8">
+                    <h4 class="font-bold"><i class="fa-solid fa-pen-to-square mr-2"></i>Sådan Præsenteres Resultatet</h4>
+                    <p class="mt-2">Kig efter "Pr>chi2" i outputtet. Dette er din p-værdi. Du kan rapportere det som:</p>
+                    <p class="mt-2 italic">"Log-rank testen viste en statistisk signifikant forskel i overlevelse mellem grupperne (p &lt; 0.001)."</p>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 5: Den Publikationsklare Graf</h3>
+                <p class="text-sm text-gray-600 mb-2"><code>sts graph</code> er kommandoen til at tegne Kaplan-Meier kurver. Med et par tilføjelser kan den blive rigtig flot.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+                    <div class="code-header"><span>STATA Do-file: Komplet Kaplan-Meier Plot</span></div>
+<pre><code class="language-stata">sts graph, by(factor_one) \
+    ci \
+    censor(number) \
+    risk(number) \
+    title("Kaplan-Meier Overlevelseskurve") \
+    xtitle("Tid (dage)") \
+    ytitle("Overlevelsessandsynlighed") \
+    legend(title("Behandlingsgruppe") order(1 "Kontrol" 2 "Behandling A")) \
+    plot1opts(lcolor(gs8) lpattern(solid)) \
+    plot2opts(lcolor(red) lpattern(dash)) \
+    risktable(, title("Antal i risiko") size(small))
+
+* Forklaring af options:
+* by(factor_one): Laver separate kurver for hver gruppe.
+* ci: Tilføjer 95% konfidensintervaller (skygge).
+* censor(number): Viser censureringer som tal på kurven.
+* risk(number): Tilføjer "Number at Risk" tabel under grafen.
+* title(), xtitle(), ytitle(): Sætter titler på graf og akser.
+* legend(): Styrer legendens udseende.
+* plot1opts(), plot2opts(): Styrer udseendet af kurve 1 og 2 (farve, mønster).
+* risktable(): Styrer udseendet af risk-tabellen.
+</code></pre>
+                </div>
+            </section>
+
+            <footer class="text-center text-gray-500 text-sm pb-10">
+                <p>Genereret til FSK Forskningstræning 2025.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-stata.min.js"></script>
+    <script>
+        // Mobile Menu & Scroll highlight
+        const btn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        btn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            if(!sidebar.classList.contains('hidden')){
+                sidebar.classList.add('fixed', 'inset-0', 'z-40', 'pt-16');
+                sidebar.classList.remove('sticky', 'h-screen');
+            } else {
+                sidebar.classList.remove('fixed', 'inset-0', 'z-40', 'pt-16');
+                sidebar.classList.add('sticky', 'h-screen');
+            }
+        });
+
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.sidebar-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                if (scrollY >= section.offsetTop - 150) current = section.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

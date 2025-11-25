@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komplet SPSS Guide: Onkologi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PrismJS for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        .code-header { display: flex; justify-content: space-between; align-items: center; background-color: #2d2d2d; color: #e5e7eb; padding: 0.5rem 1rem; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; font-size: 0.875rem; }
+        pre[class*="language-"] { margin-top: 0 !important; border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+        .sidebar-link.active { background-color: #1d4ed8; color: white; border-radius: 0.375rem; }
+        html { scroll-behavior: smooth; }
+        .step-circle { background-color: #3b82f6; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        
+        .syntax-box { background-color: #f8f9fa; border: 1px solid #dee2e6; border-left: 4px solid #6c757d; padding: 1rem; margin-top: 1.5rem; border-radius: 0.25rem; font-size: 0.9em; }
+        .syntax-box .title { font-weight: bold; color: #495057; margin-bottom: 0.5rem; display: block; }
+        .syntax-box code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+        
+        .menu-path { background-color: #eef2ff; color: #4338ca; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden bg-blue-800 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
+        <h1 class="text-xl font-bold">SPSS Guide</h1>
+        <button id="mobile-menu-btn" class="text-white hover:text-gray-200 focus:outline-none">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+    </div>
+
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="hidden lg:block w-full lg:w-72 bg-white border-r border-gray-200 h-screen sticky top-0 overflow-y-auto z-40">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-8 text-blue-800">
+                    <i class="fa-solid fa-chart-simple text-4xl"></i>
+                    <span class="font-bold text-2xl tracking-tight">SPSS Guide</span>
+                </div>
+                
+                <nav class="space-y-2">
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Introduktion</p>
+                    <a href="#installation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-download w-5"></i> Installation</a>
+                    <a href="#spss-intro" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-display w-5"></i> SPSS Brugerflade</a>
+                    <a href="#workflow" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-person-chalkboard w-5"></i> GUI vs. Syntaks</a>
+                    
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Databehandling</p>
+                    <a href="#loading" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-folder-open w-5"></i> Indlæs Data</a>
+                    <a href="#manipulation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-calculator w-5"></i> Datamanipulation</a>
+
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Analyse & Visualisering</p>
+                    <a href="#descriptive" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-chart-pie w-5"></i> Deskriptiv Statistik</a>
+                    <a href="#tables" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-table w-5"></i> Tabeller (Table 1)</a>
+                    <a href="#statistics" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-scale-balanced w-5"></i> Statistiske Tests</a>
+                    <a href="#correlation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-link w-5"></i> Korrelation</a>
+                    <a href="#survival" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-heart-pulse w-5"></i> Overlevelsesanalyse</a>
+                    <a href="#graphics" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-chart-line w-5"></i> Grafik & Plots</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 lg:p-8 max-w-5xl mx-auto w-full">
+            
+            <div class="mb-10">
+                <h1 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4">Komplet SPSS Guide for Onkologer</h1>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    En guide til IBM SPSS Statistics, der dækker alt fra installation til analyse og grafik, designet til klinikere i forskning.
+                </p>
+            </div>
+
+            <section id="installation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Installation af SPSS</h2>
+                <p class="mb-4 text-gray-600">IBM SPSS Statistics er kommerciel software, der kræver en licens. De fleste universiteter og hospitaler stiller licenser til rådighed for ansatte.</p>
+                <ol class="list-decimal list-inside space-y-2 pl-4">
+                    <li>Kontakt din lokale IT-afdeling eller software-ansvarlige for at få en licensnøgle og et download-link.</li>
+                    <li>Download installationsfilen fra IBM's hjemmeside eller det link, du har fået.</li>
+                    <li>Kør installationen og følg vejledningen.</li>
+                    <li>Efter installationen, start "SPSS License Authorization Wizard" og indtast den licensnøgle, du har modtaget.</li>
+                </ol>
+            </section>
+
+            <section id="spss-intro" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">SPSS Brugerflade</h2>
+                <p class="mb-4 text-gray-600">SPSS har flere hovedvinduer, men du vil primært arbejde med tre:</p>
+                <img src="https://i.imgur.com/Y8VlLtW.png" alt="SPSS Layout" class="rounded-lg shadow-md mb-6 border border-gray-200">
+                <ul class="list-disc list-inside space-y-2 pl-4 mb-4">
+                    <li><strong>Data Editor:</strong> Her ser og redigerer du dine data. Den har to vigtige faneblade nederst til venstre:
+                        <ul class="list-circle list-inside pl-6">
+                            <li><strong>Data View:</strong> Viser selve data, ligesom et regneark.</li>
+                            <li><strong>Variable View:</strong> Viser metadata om dine variable (navn, type, labels, osv.).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Output Viewer:</strong> Et separat vindue, hvor alle dine resultater (tabeller, grafer, test-statistik) vises. Alt hvad du gør, bliver logget her.</li>
+                    <li><strong>Syntax Editor:</strong> Et tekst-vindue hvor du kan skrive og køre SPSS's kommando-sprog (syntaks).</li>
+                </ul>
+            </section>
+
+            <section id="workflow" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">GUI vs. Syntaks: Den Bedste Arbejdsgang</h2>
+                <p class="mb-4 text-gray-600">SPSS kan bruges på to måder: ved at klikke i menuerne (GUI) eller ved at skrive kode (syntaks). En kombination er den mest robuste og reproducerbare metode.</p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg">
+                    <h4 class="font-bold">Pro Tip: Brug "Paste" knappen</h4>
+                    <p class="mt-2">Når du har valgt en analyse i menuerne og udfyldt dialogboksen, skal du <strong>ikke</strong> klikke på "OK". Klik i stedet på <strong>"Paste"</strong>. Dette indsætter den tilsvarende syntaks-kode i Syntax Editor-vinduet. Herfra kan du køre den ved at markere koden og trykke på den grønne "play" knap.</p>
+                    <p class="mt-2"><strong>Fordele:
+</strong>
+                        <ul class="list-disc list-inside pl-4">
+                            <li><strong>Dokumentation:</strong> Du har en præcis log over hver eneste datamanipulation og analyse, du har udført.</li>
+                            <li><strong>Reproducerbarhed:</strong> Du kan gemme din syntaks-fil og genkøre hele din analyse med et enkelt klik.</li>
+                            <li><strong>Effektivitet:</strong> Det er meget hurtigere at rette en lille ting i koden end at skulle igennem alle menuerne igen.</li>
+                        </ul>
+                    </p>
+                </div>
+            </section>
+
+            <section id="loading" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Indlæs Data fra Excel</h2>
+                <p class="mb-4 text-gray-600">Den mest almindelige opgave er at importere data fra en Excel-fil.</p>
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Menu-baseret metode:</h3>
+                <ol class="list-decimal list-inside space-y-2 pl-4 mb-6">
+                    <li>Gå til <span class="menu-path">File -&gt; Open -&gt; Data...</span></li>
+                    <li>I dialogboksen, skift "Files of type" til "Excel (*.xls, *.xlsx, *.xlsm)".</li>
+                    <li>Find og vælg din fil. Klik "Open".</li>
+                    <li>En ny dialogboks vises. Sørg for at "Read variable names from the first row of data" er vinget af, hvis dine kolonnenavne er i den første række. Klik "OK".</li>
+                </ol>
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Syntaks-metode:</h3>
+                <p class="mb-2 text-gray-600">Brug "Paste" knappen som beskrevet ovenfor for at generere denne syntaks.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>SPSS Syntax</span></div>
+<pre><code class="language-spss">GET DATA
+  /TYPE=XLSX
+  /FILE='C:\sti\til\din\min_datafil.xlsx'
+  /SHEET=name 'Ark1'
+  /CELLRANGE=FULL
+  /READNAMES=ON.
+EXECUTE.
+</code></pre>
+                </div>
+            </section>
+
+            <section id="manipulation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Datamanipulation</h2>
+                <p class="mb-4 text-gray-600">Oprettelse af nye variable og udvælgelse af data er centrale opgaver.</p>
+                
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">Oprette nye variable (f.eks. BMI, Alder)</h3>
+                <p class="mb-2 text-gray-600">Gøres via menuen <span class="menu-path">Transform -&gt; Compute Variable...</span></p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>SPSS Syntax</span></div>
+<pre><code class="language-spss">* Beregn BMI fra variablene 'vaegt_kg' og 'hoejde_m'.
+COMPUTE bmi = vaegt_kg / (hoejde_m**2).
+
+* Beregn alder ved diagnose.
+* DATEDIFF funktionen returnerer forskellen i den angivne enhed.
+COMPUTE alder_ved_diagnose = DATEDIFF(diagnose_dato, fodselsdato, "years").
+EXECUTE.
+</code></pre>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">Kategorisere en variabel (f.eks. Aldersgrupper)</h3>
+                <p class="mb-2 text-gray-600">Gøres via menuen <span class="menu-path">Transform -&gt; Recode into Different Variables...</span></p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>SPSS Syntax</span></div>
+<pre><code class="language-spss">* Opret en ny variabel 'alders_gruppe' baseret på 'alder_ved_diagnose'.
+RECODE alder_ved_diagnose (Lowest thru 65=1) (65.01 thru Highest=2) INTO alders_gruppe.
+* Giv de nye værdier labels for klarhed.
+VALUE LABELS alders_gruppe 1 '65 eller yngre' 2 'Over 65'.
+EXECUTE.
+</code></pre>
+                </div>
+            </section>
+
+            <section id="descriptive" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Deskriptiv Statistik</h2>
+                <p class="mb-2 text-gray-600">For at få et overblik over dine data. Brug <span class="menu-path">Analyze -&gt; Descriptive Statistics -&gt; Frequencies...</span> for kategoriske data og <span class="menu-path">Descriptives...</span> for kontinuerlige data.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>SPSS Syntax</span></div>
+<pre><code class="language-spss">* Få frekvenstabel for behandlingsgrupper.
+FREQUENCIES VARIABLES=behandling_faktor
+  /ORDER=ANALYSIS.
+
+* Få gennemsnit, SD, min, max for alder.
+DESCRIPTIVES VARIABLES=alder_ved_diagnose
+  /STATISTICS=MEAN STDDEV MIN MAX.
+</code></pre>
+                </div>
+            </section>
+
+            <section id="tables" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Tabeller ("Table 1")</h2>
+                <p class="mb-2 text-gray-600">At lave en publikationsklar "Table 1" gøres bedst med <span class="menu-path">Analyze -&gt; Tables -&gt; Custom Tables...</span>. Her kan du trække og slippe variable for at bygge en tabel, der sammenligner grupper.</p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>SPSS Syntax</span></div>
+<pre><code class="language-spss">* Eksempel på en "Table 1" der sammenligner alder og køn på tværs af behandlingsgrupper.
+* 'behandling_faktor' er i kolonnerne.
+* 'alder_ved_diagnose' og 'køn' er i rækkerne.
+CTABLES
+  /VLABELS VARIABLES=behandling_faktor alder_ved_diagnose køn DISPLAY=LABEL
+  /TABLE alder_ved_diagnose [C][MEAN, STDDEV] + køn [C][COUNT, ROWPCT.VALIDN] BY behandling_faktor [C]
+  /CATEGORIES VARIABLES=køn ORDER=A KEY=VALUE EMPTY=INCLUDE
+  /TITLES TITLE="Tabel 1: Patientkarakteristika fordelt på Behandling".
+</code></pre>
+                </div>
+            </section>
+
+            <section id="statistics" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Statistiske Tests</h2>
+                
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">T-test (Kontinuert vs. Kategorisk)</h3>
+                <p class="mb-2 text-gray-600">Sammenlign gennemsnittet mellem to grupper. Gå til <span class="menu-path">Analyze -&gt; Compare Means -&gt; Independent-Samples T Test...</span></p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>SPSS Syntax</span></div>
+<pre><code class="language-spss">T-TEST GROUPS=behandling_faktor(1 2)
+  /MISSING=ANALYSIS
+  /VARIABLES=alder_ved_diagnose
+  /CRITERIA=CI(.95).
+</code></pre>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">Chi-Square Test (Kategorisk vs. Kategorisk)</h3>
+                <p class="mb-2 text-gray-600">Test for sammenhæng mellem to kategoriske variable. Gå til <span class="menu-path">Analyze -&gt; Descriptive Statistics -&gt; Crosstabs...</span></p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>SPSS Syntax</span></div>
+<pre><code class="language-spss">CROSSTABS
+  /TABLES=behandling_faktor BY alders_gruppe
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ
+  /CELLS=COUNT
+  /COUNT ROUND CELL.
+</code></pre>
+                </div>
+            </section>
+
+            <section id="correlation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Korrelation</h2>
+                <p class="mb-2 text-gray-600">Test for lineær sammenhæng mellem to kontinuerlige variable. Gå til <span class="menu-path">Analyze -&gt; Correlate -&gt; Bivariate...</span></p>
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <div class="code-header"><span>SPSS Syntax</span></div>
+<pre><code class="language-spss">CORRELATIONS
+  /VARIABLES=alder_ved_diagnose tumor_stoerrelse
+  /PRINT=TWOTAIL NOSIG
+  /MISSING=PAIRWISE.
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Section: Survival Analysis -->
+            <section id="survival" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-cyan-100 text-cyan-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-heart-pulse"></i></span>
+                    Overlevelsesanalyse: En Komplet Arbejdsgang
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Denne sektion viser en komplet arbejdsgang for Kaplan-Meier overlevelsesanalyse i SPSS, fra rådata til færdigt output. Vi bruger generiske variabelnavne, som du kan erstatte med dine egne.
+                </p>
+
+                <div class="pro-tip mb-8">
+                    <h4><i class="fa-solid fa-lightbulb mr-2"></i>Forudsætninger for dine data</h4>
+                    <p class="text-sky-800 mt-2">For at følge denne guide, skal dit datasæt (vi kalder det <code>mit_data</code>) indeholde:</p>
+                    <ul class="list-disc list-inside text-sky-800 mt-2 pl-4">
+                        <li>En <strong>startdato</strong> (f.eks. <code>diagnose_dato</code>) og en <strong>slutdato</strong> (f.eks. <code>sidste_opfølgning_dato</code>). Disse skal være i SPSS' datoformat.</li>
+                        <li>En <strong>event-variabel</strong> (f.eks. <code>dødsfald</code>), som er numerisk. Du skal kende den værdi, der repræsenterer et event (f.eks. <strong>1</strong> for død).</li>
+                        <li>En <strong>gruppe-variabel</strong> (f.eks. <code>behandlingsgruppe</code>), som du vil sammenligne.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 1: Forberedelse af Data</h3>
+                <p class="text-sm text-gray-600 mb-2">Det første skridt er at beregne overlevelsestiden. Dette gøres typisk via menuen <span class="menu-path">Transform -&gt; Compute Variable...</span>.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-8">
+                    <div class="code-header"><span>SPSS Syntax: Databehandling</span></div>
+<pre><code class="language-spss">* Antag at dit datasæt er aktivt.
+
+* 1. Beregn overlevelsestid i dage.
+* DATEDIFF funktionen returnerer forskellen i dage.
+COMPUTE overlevelses_tid_dage = DATEDIFF(end_date, start_date, "days").
+
+* 2. Sørg for at din gruppe-variabel har labels.
+* Dette gøres typisk i "Variable View".
+VALUE LABELS factor_one 0 'Kontrol' 1 'Behandling A'.
+EXECUTE.
+</code></pre>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 2: Kør Kaplan-Meier Analysen</h3>
+                <p class="text-sm text-gray-600 mb-2">Selve analysen køres med <code>KM</code> kommandoen. Den nemmeste måde at bygge den på er via menuen <span class="menu-path">Analyze -&gt; Survival -&gt; Kaplan-Meier...</span> og bruge "Paste" knappen.</p>
+                
+                <ul class="list-disc list-inside space-y-2 pl-4 mb-4 text-sm">
+                    <li><strong>Time:</strong> Vælg din tidsvariabel (<code>overlevelses_tid_dage</code>).</li>
+                    <li><strong>Status:</strong> Vælg din event-variabel (<code>event</code>) og klik på "Define Event..." for at angive, hvilken værdi der betyder "event" (f.eks. 1).</li>
+                    <li><strong>Factor:</strong> Vælg din gruppevariabel (<code>factor_one</code>).</li>
+                    <li><strong>Options...:</strong> Vælg "Survival table(s)" og "Mean and median survival". Vælg "Survival" under "Plots".</li>
+                    <li><strong>Compare Factor...:</strong> Vælg "Log rank" for at få p-værdien.</li>
+                </ul>
+
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-8">
+                    <div class="code-header"><span>SPSS Syntax: Komplet KM Analyse</span></div>
+<pre><code class="language-spss">KM overlevelses_tid_dage BY factor_one
+  /STATUS=event(1)
+  /PRINT TABLE MEAN
+  /PLOT SURVIVAL CI(95)
+  /TEST LOGRANK
+  /COMPARE OVERALL.
+</code></pre>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 3: Aflæs Nøgletal i Output</h3>
+                <p class="text-sm text-gray-600 mb-2">Når du kører kommandoen, producerer SPSS flere tabeller i Output Viewer. Her finder du dine nøgletal:</p>
+                
+                <div class="bg-white p-4 border rounded shadow-sm mb-4">
+                    <h4 class="font-bold text-blue-700">Median Overlevelse med 95% CI</h4>
+                    <p class="text-sm text-gray-600 mt-1">Kig efter tabellen <strong>"Means and Medians for Survival Time"</strong>. Her kan du aflæse medianen og dens 95% konfidensinterval for hver gruppe.</p>
+                </div>
+                <div class="bg-white p-4 border rounded shadow-sm mb-4">
+                    <h4 class="font-bold text-blue-700">1-års Overlevelse</h4>
+                    <p class="text-sm text-gray-600 mt-1">Kig efter tabellen <strong>"Survival Table"</strong>. Find den række, hvor tiden er tættest på 365 dage. I kolonnen "Cumulative Survival" kan du aflæse overlevelsessandsynligheden ved dette tidspunkt.</p>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 4: Log-Rank Testen</h3>
+                <p class="text-sm text-gray-600 mb-2">Resultatet af din log-rank test findes i tabellen <strong>"Overall Comparisons"</strong>.</p>
+                 <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mb-8">
+                    <h4 class="font-bold"><i class="fa-solid fa-pen-to-square mr-2"></i>Sådan Præsenteres Resultatet</h4>
+                    <p class="mt-2">Kig efter "Sig." kolonnen. Dette er din p-værdi. Du kan rapportere det som:</p>
+                    <p class="mt-2 italic">"Log-rank testen viste en statistisk signifikant forskel i overlevelse mellem grupperne (p &lt; 0.001)."</p>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 5: Den Færdige Graf</h3>
+                <p class="text-sm text-gray-600 mb-2"><code>/PLOT SURVIVAL CI(95)</code> kommandoen genererer en Kaplan-Meier kurve med konfidensintervaller. Censureringer vises automatisk som små cirkler eller krydser.</p>
+                <p class="text-sm text-gray-600 mb-2">For at tilføje en <strong>risk table</strong>, skal du desværre gøre det manuelt i SPSS. Den nemmeste metode er at kopiere "Survival Table" fra dit output og indsætte den under grafen i f.eks. PowerPoint.</p>
+                <div class="mt-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-r-lg">
+                    <p><strong>Tip:</strong> Dobbeltklik på grafen i dit SPSS Output Viewer for at åbne <strong>Chart Editor</strong>. Her kan du ændre farver, titler, akser og meget mere for at gøre din graf klar til publikation.</p>
+                </div>
+            </section>
+
+            <footer class="text-center text-gray-500 text-sm pb-10">
+                <p>Genereret til FSK Forskningstræning 2025.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-spss.min.js"></script>
+    <script>
+        // Mobile Menu & Scroll highlight
+        const btn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        btn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            if(!sidebar.classList.contains('hidden')){
+                sidebar.classList.add('fixed', 'inset-0', 'z-40', 'pt-16');
+                sidebar.classList.remove('sticky', 'h-screen');
+            } else {
+                sidebar.classList.remove('fixed', 'inset-0', 'z-40', 'pt-16');
+                sidebar.classList.add('sticky', 'h-screen');
+            }
+        });
+
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.sidebar-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                if (scrollY >= section.offsetTop - 150) current = section.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FSK Forskningstræning - STATA Statistics Guide</title>
+<style>
+body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; }
+h1 { color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; }
+h2 { color: #2874a6; margin-top: 30px; border-bottom: 1px solid #aed6f1; padding-bottom: 5px; }
+h3 { color: #3498db; margin-top: 20px; }
+code { background-color: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Consolas, monospace; font-size: 10pt; }
+pre { background-color: #f8f9fa; border: 1px solid #dee2e6; border-left: 4px solid #3498db; padding: 15px; overflow-x: auto; font-family: Consolas, monospace; font-size: 10pt; }
+.note { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; }
+.tip { background-color: #d4edda; border-left: 4px solid #28a745; padding: 10px 15px; margin: 15px 0; }
+table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+th, td { border: 1px solid #dee2e6; padding: 8px 12px; text-align: left; }
+th { background-color: #3498db; color: white; }
+tr:nth-child(even) { background-color: #f8f9fa; }
+</style>
+</head>
+<body>
+
+<h1>FSK Forskningstræning - Statistik i STATA</h1>
+<p><strong>STATA Commands Guide - Dag 1</strong></p>
+<p>Denne guide forklarer de statistiske metoder fra kurset og hvordan de udføres i Stata.</p>
+
+<hr>
+
+<h2>1. Om STATA Programmer og Do-filer</h2>
+
+<p>STATA's kernefunktionalitet er meget omfattende. Yderligere funktionalitet kan tilføjes via community-bidragede programmer, som typisk installeres med kommandoen <code>ssc install [programnavn]</code>.</p>
+
+<h3>1.1 Arbejdsgang: Do-filer</h3>
+<p>Den absolut bedste praksis i STATA er at skrive alle kommandoer i en <strong>Do-fil</strong>. En Do-fil er en simpel tekstfil (med endelsen <code>.do</code>), der indeholder din kode.</p>
+
+<div class="note">
+<strong>Start altid med en Do-fil!</strong>
+<p>Åbn Do-fil editoren ved at klikke på "New Do-file Editor" ikonet, eller skriv <code>doedit</code> i Command-vinduet.</p>
+<p><strong>Fordele:</strong> Du gemmer en præcis log over din analyse, hvilket sikrer 100% reproducerbarhed og gør det nemt at rette fejl.</p>
+<p>For at køre kode fra en Do-fil, markerer du linjerne og klikker på "Execute (do)" knappen.</p>
+</div>
+
+<h3>1.2 Grundlæggende kommandoer i en Do-fil</h3>
+<p>En god Do-fil starter altid med at specificere version, rydde hukommelsen og sætte en "working directory".</p>
+<pre>
+* Angiv Stata version for reproducerbarhed
+version 17
+
+* Ryd hukommelsen
+clear all
+
+* Sæt stien til din projektmappe
+cd "G:\My Drive\Documents-Work\FSK_2025"
+
+* Start en log-fil for at gemme alt output
+log using "min_analyse_log.log", replace
+</pre>
+
+<hr>
+
+<h2>2. Indlæsning af Data fra Excel</h2>
+
+<h3>Kommando: <code>import excel</code></h3>
+<p><strong>Formål:</strong> Indlæser data fra en Excel-fil (.xls eller .xlsx) ind i STATA.</p>
+
+<pre>
+* Indlæs Excel-fil. 'firstrow' angiver at første række er variabelnavne.
+import excel "01_højde_testsæt.xls", sheet("Sheet1") firstrow
+
+* Se de første par rækker af data
+list in 1/10
+
+* Se en oversigt over variabler og data
+describe
+summarize
+</pre>
+
+<div class="note">
+<strong>Vigtigt:</strong> STATA skelner mellem store og små bogstaver i filnavne, men ikke i kommandoer eller variabelnavne.
+</div>
+
+<hr>
+
+<h2>3. Deskriptiv Statistik</h2>
+
+<h3>3.1 Gennemsnit (Mean) og Standardafvigelse (SD)</h3>
+<p><strong>Kommando:</strong> <code>summarize</code></p>
+<p><strong>Formål:</strong> Viser de vigtigste deskriptive statistikker for en variabel.</p>
+
+<pre>
+* For en specifik variabel
+summarize Height
+
+* For alle variable
+summarize
+</pre>
+
+<h3>3.2 Median</h3>
+<p><strong>Kommando:</strong> <code>summarize, detail</code></p>
+<p><strong>Formål:</strong> Giver et mere detaljeret statistisk overblik, inklusiv median og percentiler.</p>
+
+<pre>
+summarize Height, detail
+</pre>
+<p>Medianen findes ved 50% percentilen i outputtet.</p>
+
+<h3>3.3 Standard Error of the Mean (SEM)</h3>
+<p>SEM findes direkte i output fra <code>summarize</code>. Den kan også findes via <code>ci mean</code> kommandoen.</p>
+
+<div class="note">
+<strong>SD vs SEM:</strong>
+<ul>
+<li><strong>SD</strong> (Std. Dev.) beskriver spredningen i dine data.</li>
+<li><strong>SEM</strong> (Std. Err. of the Mean) beskriver usikkerheden på dit gennemsnit.</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>4. Konfidensinterval</h2>
+<p><strong>Formål:</strong> Et interval hvor den "ægte" populationsværdi sandsynligvis befinder sig.</p>
+<p><strong>Kommando:</strong> <code>ci mean</code></p>
+
+<pre>
+* Beregn 95% CI for gennemsnittet af Height
+ci mean Height
+
+* Beregn 95% CI for gennemsnittet af Weight, opdelt på Gender
+sort Gender
+by Gender: ci mean Weight
+</pre>
+<p><code>ttest</code> kommandoen (se nedenfor) giver også et konfidensinterval i sit output.</p>
+
+<hr>
+
+<h2>5. T-test</h2>
+<p><strong>Formål:</strong> Sammenligner gennemsnit mellem to grupper eller mod en kendt værdi.</p>
+
+<h3>5.1 One-sample t-test</h3>
+<p>Sammenligner stikprøvens gennemsnit med en kendt værdi.</p>
+<pre>
+* Er gennemsnitshøjden signifikant forskellig fra 175 cm?
+ttest Height == 175
+</pre>
+
+<h3>5.2 Two-sample t-test (uafhængige grupper)</h3>
+<p>Sammenligner gennemsnit mellem to grupper.</p>
+<pre>
+* Sammenlign højde mellem køn (Gender: 0=kvinde, 1=mand)
+ttest Height, by(Gender)
+</pre>
+
+<h3>5.3 Paired t-test</h3>
+<p>Sammenligner før/efter målinger på samme personer.</p>
+<pre>
+* 'before' og 'after' er to variable i datasættet
+ttest before == after
+</pre>
+
+<hr>
+
+<h2>6. Chi-square Test (χ²) og 2×2 Tabeller</h2>
+<p><strong>Formål:</strong> Tester om der er sammenhæng mellem to kategoriske variable.</p>
+<p><strong>Kommando:</strong> <code>tabulate</code> med <code>chi2</code> option.</p>
+
+<pre>
+* Lav en krydstabel af T_stage og Gender med Chi-square test
+tabulate T_stage Gender, chi2
+
+* For at få procenter per række
+tabulate T_stage Gender, chi2 row
+</pre>
+
+<h3>Fisher's Exact Test:</h3>
+<p><strong>Brug denne når en celle har færre end 5 observationer.</strong></p>
+<pre>
+tabulate T_stage Gender, exact
+</pre>
+
+<hr>
+
+<h2>7. Binomial Test</h2>
+<p><strong>Formål:</strong> Tester om en observeret proportion afviger signifikant fra en forventet værdi.</p>
+<p><strong>Kommando:</strong> <code>bitest</code></p>
+<pre>
+* 30 successes (k) ud af 100 forsøg (N)
+* Forventet proportion: 0.5
+bitest 100 30 0.5
+</pre>
+
+<hr>
+
+<h2>8. Overlevelsesanalyse - Kaplan-Meier</h2>
+<p><strong>Formål:</strong> Estimerer overlevelsessandsynlighed over tid. STATA er ekstremt stærk til dette med sit <code>st</code>-kommando sæt.</p>
+
+<h3>8.1 Trin 1: Definer overlevelsesdata med <code>stset</code></h3>
+<p>Dette er det vigtigste trin. Du skal fortælle STATA, hvad der er din tidsvariabel, og hvad der definerer et "event".</p>
+<pre>
+* Definer data: OS er tiden, og event er når Mors er lig 1
+stset OS, failure(Mors==1)
+</pre>
+
+<h3>8.2 Trin 2: Kaplan-Meier kurve med <code>sts graph</code></h3>
+<pre>
+* Simpel Kaplan-Meier kurve
+sts graph
+
+* Sammenlign kurver for grupper (fx Factor0)
+sts graph, by(Factor0)
+</pre>
+
+<h3>8.3 Trin 3: Log-rank Test med <code>sts test</code></h3>
+<p>Tester om der er signifikant forskel mellem overlevelseskurverne.</p>
+<pre>
+sts test Factor0, logrank
+</pre>
+
+<div class="tip">
+STATA's <code>sts graph, by(...)</code> viser ikke p-værdien direkte på grafen som <code>ggsurvplot</code> i R. Du skal køre <code>sts test</code> separat.
+</div>
+
+<hr>
+
+<h2>9. Cox Regression</h2>
+<p><strong>Formål:</strong> Beregner hazard ratios og kan justere for flere variable.</p>
+<p><strong>Kommando:</strong> <code>stcox</code></p>
+
+<h3>Univariat Cox regression:</h3>
+<pre>
+* Husk at køre stset først!
+stcox Factor0
+</pre>
+<p>Outputtet viser direkte Hazard Ratio (Haz. Ratio), p-værdi (P>|z|) og 95% CI.</p>
+
+<h3>Multivariat Cox regression:</h3>
+<pre>
+* Justerer for flere faktorer
+* 'i.' foran en variabel fortæller STATA at den er kategorisk
+stcox Factor0 i.Factor1 Factor2
+</pre>
+
+<div class="tip">
+<strong>Fortolkning af Hazard Ratio:</strong>
+<ul>
+<li>HR = 1: Ingen forskel i risiko.</li>
+<li>HR > 1: Øget risiko for event.</li>
+<li>HR < 1: Reduceret risiko (beskyttende effekt).</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>10. Quick Reference - Oversigt</h2>
+
+<table>
+<tr><th>Analyse</th><th>STATA Kommando</th><th>Hvornår</th></tr>
+<tr><td>Gennemsnit/SD</td><td><code>summarize [var]</code></td><td>Deskriptiv statistik</td></tr>
+<tr><td>Median</td><td><code>summarize [var], detail</code></td><td>Deskriptiv (robut)</td></tr>
+<tr><td>Konfidensinterval</td><td><code>ci mean [var]</code></td><td>Præcision af estimat</td></tr>
+<tr><td>T-test</td><td><code>ttest [var], by(group)</code></td><td>Sammenlign 2 gennemsnit</td></tr>
+<tr><td>Chi-square</td><td><code>tabulate [v1] [v2], chi2</code></td><td>2×2 tabeller</td></tr>
+<tr><td>Fisher's exact</td><td><code>tabulate [v1] [v2], exact</code></td><td>2×2 tabeller (små n)</td></tr>
+<tr><td>Binomial test</td><td><code>bitest [N] [k] [p]</code></td><td>Test proportion</td></tr>
+<tr><td>Definer overlevelse</td><td><code>stset [tid], fail(ev==1)</code></td><td>Før al overlevelsesanalyse</td></tr>
+<tr><td>Kaplan-Meier</td><td><code>sts graph, by(group)</code></td><td>Overlevelseskurver</td></tr>
+<tr><td>Log-rank test</td><td><code>sts test [group], logrank</code></td><td>Sammenlign kurver</td></tr>
+<tr><td>Cox regression</td><td><code>stcox [var1] [var2]...</code></td><td>Hazard ratios</td></tr>
+</table>
+
+<hr>
+
+<h2>11. Eksempel Workflow i en Do-fil</h2>
+
+<pre>
+version 17
+clear all
+cd "C:\sti\til\din\mappe"
+log using "survival_analysis.log", replace
+
+* 1. Indlæs data
+import excel "03_Survival.xlsx", firstrow
+
+* 2. Tjek data
+describe
+summarize
+
+* 3. Definer overlevelsesdata
+stset OS, failure(Event==1)
+
+* 4. Kaplan-Meier kurve og Log-rank test
+sts graph, by(Treatment)
+sts test Treatment, logrank
+
+* 5. Cox regression for hazard ratio
+stcox Treatment
+
+* 6. Multivariat Cox model
+stcox Treatment Age i.Gender
+
+* Luk log-filen
+log close
+</pre>
+
+<hr>
+
+<p><strong>Lavet til FSK Forskningstræning 2025</strong></p>
+
+</body>
+</html>

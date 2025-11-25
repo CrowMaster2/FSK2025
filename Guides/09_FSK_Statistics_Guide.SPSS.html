@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FSK Forskningstræning - SPSS Statistics Guide</title>
+<style>
+body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; }
+h1 { color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; }
+h2 { color: #2874a6; margin-top: 30px; border-bottom: 1px solid #aed6f1; padding-bottom: 5px; }
+h3 { color: #3498db; margin-top: 20px; }
+code { background-color: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Consolas, monospace; font-size: 10pt; }
+pre { background-color: #f8f9fa; border: 1px solid #dee2e6; border-left: 4px solid #3498db; padding: 15px; overflow-x: auto; font-family: Consolas, monospace; font-size: 10pt; }
+.note { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; }
+.tip { background-color: #d4edda; border-left: 4px solid #28a745; padding: 10px 15px; margin: 15px 0; }
+table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+th, td { border: 1px solid #dee2e6; padding: 8px 12px; text-align: left; }
+th { background-color: #3498db; color: white; }
+tr:nth-child(even) { background-color: #f8f9fa; }
+.menu-path { font-family: Consolas, monospace; background-color: #eef2ff; color: #4338ca; padding: 2px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<h1>FSK Forskningstræning - Statistik i SPSS</h1>
+<p><strong>SPSS Commands Guide - Dag 1</strong></p>
+<p>Denne guide forklarer de statistiske metoder fra kurset og hvordan de udføres i IBM SPSS Statistics.</p>
+
+<hr>
+
+<h2>1. Om SPSS Moduler</h2>
+
+<p>I modsætning til R, hvor funktionalitet tilføjes med gratis pakker, er SPSS' funktionalitet opdelt i moduler, som man køber licens til. De fleste analyser i dette kursus kan udføres med <strong>SPSS Statistics Base</strong> og modulet <strong>Advanced Statistics</strong>.</p>
+
+<h3>1.1 Arbejdsgang: Menuer vs. Syntaks</h3>
+<p>SPSS kan bruges på to måder:</p>
+<ol>
+    <li><strong>Menuer (GUI):</strong> Du klikker dig frem til analyser via menuerne i toppen. Dette er nemt for begyndere.</li>
+    <li><strong>Syntaks:</strong> Du skriver kommandoer i et "Syntax Editor" vindue. Dette er mere avanceret, men sikrer reproducerbarhed.</li>
+</ol>
+
+<div class="tip">
+<strong>Anbefalet Workflow: Brug "Paste"-knappen!</strong>
+<p>Når du har valgt en analyse i menuerne, klik <strong>ikke</strong> på "OK". Klik i stedet på <strong>"Paste"</strong>. Dette indsætter den tilsvarende syntaks-kode i et syntaks-vindue. Herfra kan du køre koden.</p>
+<p><strong>Fordele:</strong> Du får en gemt fil med præcis alle de trin, du har udført, hvilket er essentielt for god forskning.</p>
+</div>
+
+<hr>
+
+<h2>2. Indlæsning af Data fra Excel</h2>
+
+<h3>Metode: <span class="menu-path">File -> Open -> Data...</span></h3>
+<p><strong>Formål:</strong> Indlæser data fra en Excel-fil (.xls eller .xlsx) ind i SPSS Data Editor.</p>
+
+<ol>
+    <li>Åbn SPSS.</li>
+    <li>Gå til <span class="menu-path">File -> Open -> Data...</span></li>
+    <li>I dialogboksen, find din mappe og skift "Files of type" til "Excel".</li>
+    <li>Vælg din fil og klik "Open".</li>
+    <li>En ny boks åbner. Sørg for at "Read variable names from the first row of data" er markeret, hvis din første række indeholder navne. Klik "OK".</li>
+</ol>
+
+<h3>Syntaks-kode:</h3>
+<pre>
+GET DATA
+  /TYPE=XLSX
+  /FILE='G:\My Drive\Documents-Work\FSK_2025\01_højde_testsæt.xls'
+  /SHEET=name 'Sheet1'
+  /CELLRANGE=FULL
+  /READNAMES=ON.
+EXECUTE.
+</pre>
+
+<div class="note">
+<strong>Vigtigt:</strong> Efter indlæsning, gå til "Variable View" i bunden af Data Editor for at tjekke, at dine variable har de korrekte typer (Numeric, String, Date) og måleniveauer (Scale, Ordinal, Nominal).
+</div>
+
+<hr>
+
+<h2>3. Deskriptiv Statistik</h2>
+
+<h3>3.1 Gennemsnit, Median, Standardafvigelse</h3>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Descriptive Statistics -> Descriptives...</span> eller <span class="menu-path">Frequencies...</span></p>
+<p><strong>Formål:</strong> Beregner centrale deskriptive mål for kontinuerlige variable (Scale).</p>
+
+<ol>
+    <li>Gå til <span class="menu-path">Analyze -> Descriptive Statistics -> Descriptives...</span></li>
+    <li>Flyt de variable, du vil analysere (fx 'Height') over i "Variable(s)" boksen.</li>
+    <li>Klik på "Options..." og vælg de statistikker, du ønsker (Mean, Std. deviation, Min, Max, S.E. mean).</li>
+    <li>Klik "Continue" og derefter "Paste" for at få syntaksen.</li>
+</ol>
+
+<h3>Syntaks-kode:</h3>
+<pre>
+DESCRIPTIVES VARIABLES=Height
+  /STATISTICS=MEAN STDDEV SEMEAN MIN MAX.
+</pre>
+
+<div class="tip">
+Brug <span class="menu-path">Analyze -> Descriptive Statistics -> Frequencies...</span> og klik på "Statistics..." knappen for at få median og percentiler.
+</div>
+
+<h3>3.2 Standard Error of the Mean (SEM)</h3>
+<p>SEM beregnes direkte i SPSS via <span class="menu-path">Descriptives</span> (se ovenfor) ved at afkrydse "S.E. mean".</p>
+
+<div class="note">
+<strong>SD vs SEM:</strong>
+<ul>
+<li><strong>SD</strong> (Std. Deviation) beskriver spredningen i dine data.</li>
+<li><strong>SEM</strong> (Standard Error of Mean) beskriver usikkerheden på dit gennemsnit.</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>4. Konfidensinterval</h2>
+<p><strong>Formål:</strong> Et interval hvor den "ægte" populationsværdi sandsynligvis befinder sig.</p>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Descriptive Statistics -> Explore...</span></p>
+
+<ol>
+    <li>Gå til <span class="menu-path">Analyze -> Descriptive Statistics -> Explore...</span></li>
+    <li>Flyt din variabel (fx 'Height') til "Dependent List".</li>
+    <li>Klik på "Statistics..." og sørg for at "Descriptives" er valgt. Her kan du ændre konfidensniveauet (standard er 95%).</li>
+    <li>Klik "Continue" og "Paste".</li>
+</ol>
+
+<h3>Syntaks-kode:</h3>
+<pre>
+EXAMINE VARIABLES=Height
+  /PLOT NONE
+  /STATISTICS DESCRIPTIVES
+  /CINTERVAL 95
+  /MISSING LISTWISE
+  /NOTOTAL.
+</pre>
+<p>Output-tabellen "Descriptives" vil indeholde et 95% konfidensinterval for gennemsnittet.</p>
+
+<hr>
+
+<h2>5. T-test</h2>
+<p><strong>Formål:</strong> Sammenligner gennemsnit mellem to grupper eller mod en kendt værdi.</p>
+
+<h3>5.1 One-sample t-test</h3>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Compare Means -> One-Sample T Test...</span></p>
+<p>Sammenligner stikprøvens gennemsnit med en kendt værdi.</p>
+<pre>
+* Er lokalet højere end danske gennemsnit (175 cm)?
+T-TEST
+  /TESTVALUE=175
+  /MISSING=ANALYSIS
+  /VARIABLES=Height
+  /CRITERIA=CI(.95).
+</pre>
+
+<h3>5.2 Two-sample t-test (uafhængige grupper)</h3>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Compare Means -> Independent-Samples T Test...</span></p>
+<p>Sammenligner gennemsnit mellem to grupper.</p>
+<pre>
+* Sammenlign højde mellem køn (Gender: 0=kvinde, 1=mand)
+T-TEST GROUPS=Gender(0 1)
+  /MISSING=ANALYSIS
+  /VARIABLES=Height
+  /CRITERIA=CI(.95).
+</pre>
+
+<h3>5.3 Paired t-test</h3>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Compare Means -> Paired-Samples T Test...</span></p>
+<p>Sammenligner før/efter målinger på samme personer.</p>
+<pre>
+T-TEST PAIRS=before WITH after (PAIRED)
+  /CRITERIA=CI(.95)
+  /MISSING=ANALYSIS.
+</pre>
+
+<hr>
+
+<h2>6. Chi-square Test (χ²) og 2×2 Tabeller</h2>
+<p><strong>Formål:</strong> Tester om der er sammenhæng mellem to kategoriske variable (Nominal/Ordinal).</p>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Descriptive Statistics -> Crosstabs...</span></p>
+
+<ol>
+    <li>Flyt den ene variabel til "Row(s)" og den anden til "Column(s)".</li>
+    <li>Klik på "Statistics..." og marker "Chi-square".</li>
+    <li>Klik på "Cells..." og marker "Observed" under Counts og "Row" under Percentages.</li>
+    <li>Klik "Continue" og "Paste".</li>
+</ol>
+
+<h3>Syntaks-kode:</h3>
+<pre>
+CROSSTABS
+  /TABLES=T_stage BY Gender
+  /FORMAT=AVALUE TABLES
+  /STATISTICS=CHISQ
+  /CELLS=COUNT ROW
+  /COUNT ROUND CELL.
+</pre>
+
+<h3>Fisher's Exact Test:</h3>
+<p>Hvis en celle i din tabel har en forventet værdi (Expected Count) under 5, skal du bruge Fisher's Exact Test. Denne værdi vises automatisk i output fra Chi-square testen i SPSS, når du har en 2x2 tabel.</p>
+
+<hr>
+
+<h2>7. Binomial Test</h2>
+<p><strong>Formål:</strong> Tester om en observeret proportion afviger signifikant fra en forventet værdi.</p>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Nonparametric Tests -> Legacy Dialogs -> Binomial...</span></p>
+<pre>
+* Test om proportionen af 'success' (kodet som 1) er 0.5
+NPAR TESTS
+  /BINOMIAL(0.5)=variabel_navn (1)
+  /MISSING ANALYSIS.
+</pre>
+
+<hr>
+
+<h2>8. Overlevelsesanalyse - Kaplan-Meier</h2>
+<p><strong>Formål:</strong> Estimerer overlevelsessandsynlighed over tid, håndterer censurerede data.</p>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Survival -> Kaplan-Meier...</span></p>
+
+<ol>
+    <li><strong>Time:</strong> Vælg din tidsvariabel (fx 'OS').</li>
+    <li><strong>Status:</strong> Vælg din event-variabel (fx 'Mors') og klik "Define Event...". Indtast den værdi, der repræsenterer eventet (fx død = 1).</li>
+    <li><strong>Factor:</strong> Vælg din gruppevariabel (fx 'Factor0') for at sammenligne kurver.</li>
+    <li><strong>Compare Factor:</strong> Klik på "Compare Factor..." og marker "Log rank".</li>
+    <li><strong>Options:</strong> Klik på "Options..." og marker "Survival table(s)" og "Mean and median survival".</li>
+    <li>Klik "Continue" og "Paste".</li>
+</ol>
+
+<h3>Syntaks-kode:</h3>
+<pre>
+KM OS BY Factor0
+  /STATUS=Mors(1)
+  /PRINT TABLE MEAN
+  /PLOT SURVIVAL
+  /TEST LOGRANK
+  /COMPARE OVERALL.
+</pre>
+<p>Outputtet vil indeholde Kaplan-Meier tabeller, median overlevelse, overlevelsesplot, og Log-rank testen for forskel mellem grupperne.</p>
+
+<hr>
+
+<h2>9. Log-rank Test</h2>
+<p>Log-rank testen udføres direkte som en del af Kaplan-Meier analysen i SPSS (se ovenfor). Resultatet findes i tabellen "Overall Comparisons" i dit output, hvor p-værdien ("Sig.") for Log Rank testen viser, om der er en signifikant forskel mellem overlevelseskurverne.</p>
+
+<div class="tip">
+<strong>Fortolkning:</strong>
+<ul>
+<li>Sig. < 0.05: Der ER signifikant forskel mellem kurverne.</li>
+<li>Sig. ≥ 0.05: Der er IKKE signifikant forskel.</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>10. Cox Regression</h2>
+<p><strong>Formål:</strong> Beregner hazard ratios og kan justere for flere variable.</p>
+<p><strong>Metode:</strong> <span class="menu-path">Analyze -> Survival -> Cox Regression...</span></p>
+
+<ol>
+    <li><strong>Time:</strong> Vælg din tidsvariabel (fx 'OS').</li>
+    <li><strong>Status:</strong> Vælg din event-variabel (fx 'Mors') og definer eventet (fx 1).</li>
+    <li><strong>Covariates:</strong> Indsæt de variable, du vil teste (fx 'Factor0', 'Factor1'). For kategoriske variable, klik på "Categorical..." knappen og flyt dem over for at definere dem korrekt.</li>
+    <li>Klik "Paste".</li>
+</ol>
+
+<h3>Syntaks-kode:</h3>
+<pre>
+* Univariat Cox regression:
+COXREG OS /STATUS=Mors(1)
+  /METHOD=ENTER Factor0.
+
+* Multivariat Cox regression:
+COXREG OS /STATUS=Mors(1)
+  /METHOD=ENTER Factor0 Factor1 Factor2.
+</pre>
+
+<div class="tip">
+<strong>Fortolkning af Hazard Ratio (HR):</strong>
+<p>Findes i "Variables in the Equation" tabellen under kolonnen "Exp(B)".</p>
+<ul>
+<li>HR = 1: Ingen forskel i risiko.</li>
+<li>HR > 1: Øget risiko for event.</li>
+<li>HR < 1: Reduceret risiko (beskyttende effekt).</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>11. Quick Reference - Oversigt</h2>
+
+<table>
+<tr><th>Analyse</th><th>SPSS Menu Sti</th><th>Hvornår</th></tr>
+<tr><td>Deskriptiv</td><td><code>Analyze -> Descriptive Statistics -> Descriptives</code></td><td>Gennemsnit, SD, SEM</td></tr>
+<tr><td>Konfidensinterval</td><td><code>Analyze -> Descriptive Statistics -> Explore</code></td><td>Præcision af gennemsnit</td></tr>
+<tr><td>T-test</td><td><code>Analyze -> Compare Means -> ... T Test</code></td><td>Sammenlign 2 gennemsnit</td></tr>
+<tr><td>Chi-square</td><td><code>Analyze -> Descriptive Statistics -> Crosstabs</code></td><td>Sammenhæng ml. 2 kat. var.</td></tr>
+<tr><td>Binomial test</td><td><code>Analyze -> Nonparametric Tests -> Binomial</code></td><td>Test proportion</td></tr>
+<tr><td>Kaplan-Meier</td><td><code>Analyze -> Survival -> Kaplan-Meier</code></td><td>Overlevelseskurver</td></tr>
+<tr><td>Log-rank test</td><td>(Del af Kaplan-Meier)</td><td>Sammenlign kurver</td></tr>
+<tr><td>Cox regression</td><td><code>Analyze -> Survival -> Cox Regression</code></td><td>Hazard ratios</td></tr>
+</table>
+
+<hr>
+
+<h2>12. Eksempel Workflow</h2>
+<p>Følgende er en typisk arbejdsgang i en SPSS syntaks-fil.</p>
+<pre>
+* 1. Indlæs data.
+GET DATA /TYPE=XLSX /FILE='C:\data\03_Survival.xlsx'.
+EXECUTE.
+
+* 2. Tjek data.
+FREQUENCIES VARIABLES=ALL /ORDER=ANALYSIS.
+DESCRIPTIVES VARIABLES=OS /STATISTICS=MEAN STDDEV.
+
+* 3. Kør Kaplan-Meier analyse med Log-rank test.
+KM OS BY Treatment
+  /STATUS=Event(1)
+  /PRINT TABLE
+  /PLOT SURVIVAL
+  /TEST LOGRANK.
+
+* 4. Kør Cox regression for at få Hazard Ratio.
+COXREG OS /STATUS=Event(1)
+  /METHOD=ENTER Treatment.
+</pre>
+
+<hr>
+
+<p><strong>Lavet til FSK Forskningstræning 2025</strong></p>
+
+</body>
+</html>

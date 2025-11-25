@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komplet R Kursus Guide: Onkologi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PrismJS for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        .code-header { display: flex; justify-content: space-between; align-items: center; background-color: #2d2d2d; color: #e5e7eb; padding: 0.5rem 1rem; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; font-size: 0.875rem; }
+        pre[class*="language-"] { margin-top: 0 !important; border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+        .sidebar-link.active { background-color: #2563eb; color: white; border-radius: 0.375rem; }
+        .cmd-table th { background-color: #f3f4f6; text-align: left; padding: 0.75rem; font-size: 0.875rem; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; }
+        .cmd-table td { padding: 0.75rem; font-size: 0.875rem; border-bottom: 1px solid #e5e7eb; }
+        .cmd-table code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background-color: #f3f4f6; padding: 2px 4px; border-radius: 4px; }
+        html { scroll-behavior: smooth; }
+        .step-circle { background-color: #3b82f6; color: white; border-radius: 50%; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        
+        .syntax-box { background-color: #f8f9fa; border: 1px solid #dee2e6; border-left: 4px solid #6c757d; padding: 1rem; margin-top: 1.5rem; border-radius: 0.25rem; font-size: 0.9em; }
+        .syntax-box .title { font-weight: bold; color: #495057; margin-bottom: 0.5rem; display: block; }
+        .syntax-box code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+        
+        .pro-tip { background-color: #e0f2fe; border-left: 4px solid #0ea5e9; padding: 1rem; margin-top: 1.5rem; margin-bottom: 1.5rem; border-radius: 0.25rem; }
+        .pro-tip h4 { color: #0369a1; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden bg-blue-700 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-md">
+        <h1 class="text-xl font-bold">R Kursus Guide</h1>
+        <button id="mobile-menu-btn" class="text-white hover:text-gray-200 focus:outline-none">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+    </div>
+
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="hidden lg:block w-full lg:w-72 bg-white border-r border-gray-200 h-screen sticky top-0 overflow-y-auto z-40">
+            <div class="p-6">
+                <div class="flex items-center gap-2 mb-8 text-blue-700">
+                    <i class="fa-brands fa-r-project text-4xl"></i>
+                    <span class="font-bold text-2xl tracking-tight">Komplet Guide</span>
+                </div>
+                
+                <nav class="space-y-2">
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Introduktion</p>
+                    <a href="#installation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-power-off w-5"></i> Installation af R & RStudio</a>
+                    <a href="#rstudio-intro" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-display w-5"></i> RStudio's Brugerflade</a>
+                    <a href="#first-script" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-file-code w-5"></i> Dit Første R Script</a>
+                    <a href="#setup" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-rocket w-5"></i> Startscript & Pakker</a>
+                    
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Databehandling</p>
+                    <a href="#loading" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-folder-open w-5"></i> Indlæs Data</a>
+                    <a href="#manipulation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-calculator w-5"></i> Datamanipulation</a>
+                    <a href="#attach-detach" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-paperclip w-5"></i> Attach & Detach</a>
+                    <a href="#pro-tip-autocomplete" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-wand-magic-sparkles w-5"></i> Pro Tip: Auto-udfyldning</a>
+
+                    <p class="px-4 pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Analyse & Visualisering</p>
+                    <a href="#descriptive" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-chart-pie w-5"></i> Deskriptiv Statistik</a>
+                    <a href="#tables" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-table w-5"></i> Tabeller (Table 1)</a>
+                    <a href="#statistics" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-scale-balanced w-5"></i> Statistiske Tests</a>
+                    <a href="#correlation" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-link w-5"></i> Korrelation</a>
+                    <a href="#survival" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-heart-pulse w-5"></i> Overlevelsesanalyse</a>
+                    <a href="#graphics" class="sidebar-link block px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-md"><i class="fa-solid fa-chart-line w-5"></i> Grafik & Plots</a>
+                </nav>
+            </div>
+            
+            <div class="p-6 mt-auto border-t border-gray-100">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="text-sm font-bold text-blue-800 mb-1">Husk</h4>
+                    <p class="text-xs text-blue-600">R skelner mellem store og små bogstaver (case-sensitive).</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 lg:p-8 max-w-5xl mx-auto w-full">
+            
+            <!-- Hero -->
+            <div class="mb-10">
+                <h1 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4">Komplet R Guide for Onkologer</h1>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    Denne guide dækker alt fra installation af R og RStudio til avanceret databehandling, statistiske tests og visualisering (inkl. Kaplan-Meier kurver).
+                </p>
+            </div>
+
+            <!-- Section: Installation -->
+            <section id="installation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-power-off"></i></span>
+                    Installation af R & RStudio
+                </h2>
+                <p class="mb-6 text-gray-600">
+                    For at bruge R, skal du installere to programmer: Først <strong>R</strong> (selve sproget) og derefter <strong>RStudio</strong> (en brugervenlig editor). Følg disse to trin.
+                </p>
+
+                <div class="space-y-8">
+                    <!-- Step 1: Install R -->
+                    <div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="step-circle">1</div>
+                            <h3 class="text-xl font-bold text-gray-700">Download og Installer R</h3>
+                        </div>
+                        <p class="mb-3">Gå til den officielle R-downloadside:</p>
+                        <a href="https://cran.r-project.org/" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition mb-4">
+                            Gå til cran.r-project.org <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+                        </a>
+                        <ol class="list-decimal list-inside space-y-2 pl-4">
+                            <li>Klik på <strong>"Download R for Windows"</strong>.</li>
+                            <li>Klik på <strong>"base"</strong> øverst på siden.</li>
+                            <li>Klik på den store <strong>"Download R-4.x.x for Windows"</strong> link (vælg den nyeste version).</li>
+                            <li>Kør installationsfilen, du lige har downloadet. Du kan trygt klikke "Next" / "OK" til alt.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Step 2: Install RStudio -->
+                    <div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="step-circle">2</div>
+                            <h3 class="text-xl font-bold text-gray-700">Download og Installer RStudio</h3>
+                        </div>
+                        <p class="mb-3">Gå til RStudio's downloadside (nu kaldet Posit):</p>
+                        <a href="https://posit.co/download/rstudio-desktop/" target="_blank" class="inline-block bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition mb-4">
+                            Gå til posit.co/download <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+                        </a>
+                        <ol class="list-decimal list-inside space-y-2 pl-4">
+                            <li>Scroll ned til du ser en tabel med forskellige versioner.</li>
+                            <li>Find den gratis version "RStudio Desktop" og klik på "DOWNLOAD" knappen.</li>
+                            <li>Siden vil automatisk foreslå den rigtige version til Windows. Klik på download-linket.</li>
+                            <li>Kør installationsfilen. Igen kan du trygt acceptere standardindstillingerne.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="mt-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-r-lg">
+                    <p><strong>Vigtigt:</strong> Rækkefølgen er afgørende. Installer altid <strong>R først</strong>, og derefter RStudio. RStudio er en "skal" eller et program, der har brug for R-motoren for at fungere.</p>
+                </div>
+            </section>
+
+            <!-- Section: RStudio Intro -->
+            <section id="rstudio-intro" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-indigo-100 text-indigo-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-display"></i></span>
+                    RStudio's Brugerflade
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Når du åbner RStudio (find det i din Start-menu), vil du se fire hovedpaneler. Her er en oversigt over, hvad de gør.
+                </p>
+                <img src="https://i.imgur.com/gB6nZJ3.png" alt="RStudio Layout" class="rounded-lg shadow-md mb-6 border border-gray-200">
+                
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <table class="w-full cmd-table">
+                        <thead>
+                            <tr>
+                                <th>Panel</th>
+                                <th>Placering</th>
+                                <th>Funktion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Script Editor</strong></td>
+                                <td>Øverst til venstre</td>
+                                <td>Her skriver og gemmer du din R-kode i filer (scripts). Dette panel er ikke synligt, før du åbner eller opretter et script.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Console</strong></td>
+                                <td>Nederst til venstre</td>
+                                <td>Her kan du skrive og køre R-kode direkte. Resultater og fejlmeddelelser vises her.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Environment / History</strong></td>
+                                <td>Øverst til højre</td>
+                                <td>Viser alle de data, variable og funktioner, du har indlæst i din nuværende session.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Files / Plots / Packages</strong></td>
+                                <td>Nederst til højre</td>
+                                <td>Et multifunktionspanel, der viser computerens filer, dine grafer (plots), installerede pakker og hjælpesider.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section: First Script -->
+            <section id="first-script" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-pink-100 text-pink-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-file-code"></i></span>
+                    Dit Første R Script
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Du bør altid skrive din kode i et <strong>R Script</strong>. Det lader dig gemme dit arbejde, rette fejl og genkøre din analyse.
+                </p>
+                <ol class="list-decimal list-inside space-y-4 pl-4 mb-6">
+                    <li><strong>Opret et nyt script:</strong> I RStudio, gå til <code class="text-sm">File -> New File -> R Script</code>. Genvejen er <strong>Ctrl + Shift + N</strong>.</li>
+                    <li><strong>Skriv en kommando:</strong> Skriv <code>print("Hello, World!")</code> i script-editoren (det nye, hvide panel øverst til venstre).</li>
+                    <li><strong>Kør kommandoen:</strong> Placer cursoren på linjen og tryk på <strong>Ctrl + Enter</strong>. Du vil se outputtet <code>[1] "Hello, World!"</code> i konsollen nedenunder.</li>
+                    <li><strong>Gem dit script:</strong> Gå til <code class="text-sm">File -> Save As...</code> og giv dit script et navn, f.eks. <code>min_analyse.R</code>. Det er vigtigt at filnavnet slutter med <code>.R</code>.</li>
+                </ol>
+                <div class="bg-white p-4 border rounded shadow-sm">
+                    <h4 class="font-bold text-blue-700 mb-2">Sådan kører du kode fra et script</h4>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="border-b"><td class="py-2 pr-2"><strong>Kør den nuværende linje:</strong></td><td class="py-2"><code class="bg-gray-200 px-2 py-1 rounded">Ctrl + Enter</code></td></tr>
+                            <tr><td class="py-2 pr-2"><strong>Kør hele scriptet:</strong></td><td class="py-2"><code class="bg-gray-200 px-2 py-1 rounded">Ctrl + Shift + Enter</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section: Libraries -->
+            <section id="setup" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-rocket"></i></span>
+                    Startscript & Pakker
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    R's funktionalitet udvides med "pakker". Du installerer en pakke <strong>én gang</strong>, men du skal indlæse den med <code>library()</code> <strong>hver gang</strong> du starter RStudio.
+                </p>
+                <p class="mb-4 text-gray-600">
+                    Kopier og indsæt koden nedenfor øverst i dit R script. Den installerer automatisk de nødvendige pakker, hvis de mangler, og indlæser dem derefter.
+                </p>
+                
+                <div class="rounded-lg overflow-hidden shadow-lg mb-6">
+                    <div class="code-header">
+                        <span>R Script: Start-skabelon</span>
+                        <button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white py-1 px-3 rounded transition" onclick="copyCode(this)">Kopier</button>
+                    </div>
+<pre><code class="language-r"># =================================================
+# FSK FORSKNINGSTRÆNING - KOMPLET START SCRIPT
+# =================================================
+# Forfatter: [Dit Navn]
+# Dato: [Dagens Dato]
+# -------------------------------------------------
+
+# --- 1. INDLÆS BIBLIOTEKER ---
+
+# Liste over pakker til kurset
+pakker <- c(
+  "readxl",      # Læser Excel-filer (.xls, .xlsx)
+  "survival",    # Overlevelsesanalyse (Kaplan-Meier, Cox)
+  "survminer",   # Flotte overlevelseskurver
+  "ggplot2",     # Professionelle grafer
+  "dplyr",       # Datamanipulation
+  "tidyverse",   # Samling af nyttige pakker (inkl. ggplot2, dplyr, tidyr, readr)
+  "gtsummary",   # Flotte, publikationsklare tabeller
+  "lubridate"    # Nem håndtering af datoer
+)
+
+# Loop der tjekker, installerer og indlæser pakkerne
+installed_packages <- installed.packages()[, "Package"]
+for (pkg in pakker) {
+  if (!pkg %in% installed_packages) {
+    print(paste("Installerer pakke:", pkg))
+    install.packages(pkg, dependencies = TRUE)
+  }
+  library(pkg, character.only = TRUE)
+}
+
+# Bekræft at tidyverse er klar
+print("✓ Alle pakker er indlæst og klar til brug!")
+
+# --- 2. INDLÆS DATA ---
+# Sæt din sti til data-mappen her, eller brug RStudio's menu:
+# Session -> Set Working Directory -> To Source File Location
+# data <- read_excel("min_datafil.xlsx")
+
+
+# --- 3. DIN ANALYSE STARTER HER ---
+
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Section: Loading Data -->
+            <section id="loading" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-yellow-100 text-yellow-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-folder-open"></i></span>
+                    Indlæs Data
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Den nemmeste måde at indlæse data på er at placere din datafil i samme mappe som dit R script og sætte din "Working Directory".
+                </p>
+                <p class="mb-4 text-gray-600">
+                    Gå til menuen <code class="text-sm">Session -> Set Working Directory -> To Source File Location</code>. Nu kigger R i den rigtige mappe, og du kan indlæse din fil med en simpel kommando.
+                </p>
+
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+                    <div class="code-header">
+                        <span>R Script (Indlæsning)</span>
+                        <button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white py-1 px-3 rounded transition" onclick="copyCode(this)">Kopier</button>
+                    </div>
+<pre><code class="language-r"># 1. Excel filer (Det mest almindelige)
+# Kræver 'readxl' pakken. 
+# Hvis du har flere ark, brug sheet = "ArkNavn" eller sheet = 2
+data <- read_excel("min_datafil.xlsx")
+
+# 2. CSV filer (Komma-separeret)
+# Standard format i USA/UK. Kræver 'readr' (en del af tidyverse)
+data_csv <- read_csv("min_datafil.csv")
+
+# 3. CSV filer (Semikolon-separeret)
+# Standard dansk format (fordi vi bruger komma som decimal). Kræver 'readr'.
+data_csv2 <- read_csv2("min_datafil_dansk.csv")
+
+# Tjek at data ser rigtigt ud
+head(data)    # Vis de første 6 rækker
+str(data)     # Vis struktur og variabeltyper
+summary(data) # Få et hurtigt overblik over hver kolonne
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Section: Data Manipulation -->
+            <section id="manipulation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-green-100 text-green-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-calculator"></i></span>
+                    Datamanipulation & Nye Variabler
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Ofte skal du oprette nye variabler ud fra eksisterende data. Det kan være at udregne alder, BMI, eller tid-til-event. Vi bruger <code>dplyr</code> pakken til dette, som er en del af <code>tidyverse</code>.
+                </p>
+
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+                    <div class="code-header">
+                        <span>R Script (Eksempler)</span>
+                        <button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white py-1 px-3 rounded transition" onclick="copyCode(this)">Kopier</button>
+                    </div>
+<pre><code class="language-r"># Antager at dit datasæt hedder 'data'
+# Vi bruger "pipe" operatoren: %>% 
+# Den betyder "tag resultatet fra venstre og send det videre til højre"
+
+data_clean <- data %>%
+  mutate(
+    # 1. Simpel matematik (+, -, *, /)
+    # Eks: BMI beregning (højde i m, vægt i kg)
+    bmi = vaegt_kg / (hoejde_m^2),
+
+    # 2. Dato differencer (Tid til event)
+    # Kræver 'lubridate' pakken. Resultatet er i dage.
+    tid_til_recidiv_dage = as.numeric(recidiv_dato - diagnose_dato),
+    
+    # Eks: Alder ved diagnose (dato minus dato divideret med 365.25)
+    alder_ved_diagnose = as.numeric(diagnose_dato - fodselsdato) / 365.25,
+
+    # 3. Logiske variabler (Kategorisering)
+    # ifelse(BETINGELSE, HVIS_SAND, HVIS_FALSK)
+    alders_gruppe = ifelse(alder_ved_diagnose > 65, "Over 65", "65 eller yngre"),
+    
+    # En mere avanceret version med case_when() til flere kategorier
+    tumor_stadium_gruppe = case_when(
+      tumor_stadium %in% c("T1", "T2") ~ "Tidlig",
+      tumor_stadium %in% c("T3", "T4") ~ "Avanceret",
+      TRUE ~ "Ukendt" # Værdi hvis ingen af de ovenstående er sande
+    ),
+
+    # 4. Konvertering til factor (vigtigt for analyser og grafer)
+    # Definerer en variabel som en kategori med en bestemt rækkefølge
+    behandling_faktor = factor(behandling, levels = c("Standard", "Eksperimentel"))
+  )
+
+# Se de nye kolonner
+head(data_clean)
+</code></pre>
+                </div>
+                <div class="bg-white rounded-lg shadow overflow-hidden mt-8">
+                    <table class="w-full cmd-table">
+                        <caption class="text-left font-bold text-lg p-4 bg-gray-100">Oversigt over <code>dplyr</code> kommandoer</caption>
+                        <thead>
+                            <tr>
+                                <th>Mål</th>
+                                <th>Syntaks & Forklaring</th>
+                                <th>Kopi-klar Kommando</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Vælg kolonner</strong></td>
+                                <td><code>select()</code> bruges til at vælge eller fjerne kolonner.</td>
+                                <td><code>nyt_data <- dit_datasæt %>% select(kolonne1, kolonne2)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Filtrer rækker</strong></td>
+                                <td><code>filter()</code> bruges til at vælge rækker, der opfylder en betingelse.</td>
+                                <td><code>nyt_data <- dit_datasæt %>% filter(alder > 65)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Opret nye kolonner</strong></td>
+                                <td><code>mutate()</code> bruges til at beregne og tilføje nye kolonner.</td>
+                                <td><code>nyt_data <- dit_datasæt %>% mutate(ny_kolonne = kolonne1 * 2)</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sortér data</strong></td>
+                                <td><code>arrange()</code> sorterer rækkerne efter en eller flere kolonner. Brug <code>desc()</code> for faldende rækkefølge.</td>
+                                <td><code>nyt_data <- dit_datasæt %>% arrange(desc(alder))</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gruppér & Opsummer</strong></td>
+                                <td><code>group_by()</code> og <code>summarise()</code> bruges sammen til at beregne statistik for grupper.</td>
+                                <td><code>nyt_data <- dit_datasæt %>% group_by(gruppe_kolonne) %>% summarise(gennemsnit = mean(tal_kolonne))</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="check-work" class="mt-12">
+                    <h3 class="text-xl font-bold text-gray-700 mb-4 flex items-center gap-3">
+                        <span class="bg-emerald-100 text-emerald-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-magnifying-glass-chart"></i></span>
+                        Sådan Tjekker Du Dit Arbejde
+                    </h3>
+                    <p class="mb-4 text-gray-600">Efter du har manipuleret dine data, er det <strong>kritisk</strong> at tjekke, om resultatet er som forventet. Her er tre essentielle kommandoer til at inspicere dit nye datasæt (f.eks. <code>data_clean</code>).</p>
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 border rounded shadow-sm">
+                            <h4 class="font-bold text-blue-700">1. <code>head()</code> - Se de første rækker</h4>
+                            <p class="text-sm text-gray-600 mb-2">Giver et hurtigt kig på de første 6 rækker for at se, om dine nye kolonner ser rigtige ud.</p>
+                            <pre><code class="language-r">head(data_clean)</code></pre>
+                        </div>
+                        <div class="bg-white p-4 border rounded shadow-sm">
+                            <h4 class="font-bold text-blue-700">2. <code>glimpse()</code> - Få et strukturelt overblik</h4>
+                            <p class="text-sm text-gray-600 mb-2">En fantastisk funktion fra <code>dplyr</code>, der viser hver kolonne, dens datatype og de første par værdier. Meget mere læsevenlig end <code>str()</code>.</p>
+                            <pre><code class="language-r">glimpse(data_clean)</code></pre>
+                        </div>
+                        <div class="bg-white p-4 border rounded shadow-sm">
+                            <h4 class="font-bold text-blue-700">3. <code>View()</code> - Åbn i et interaktivt vindue</h4>
+                            <p class="text-sm text-gray-600 mb-2">Åbner hele dit datasæt i et nyt faneblad i RStudio, hvor du kan scrolle og søge, ligesom i Excel. Bemærk det store 'V'.</p>
+                            <pre><code class="language-r">View(data_clean)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Attach/Detach -->
+            <section id="attach-detach" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-orange-100 text-orange-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-paperclip"></i></span>
+                    Enklere Kode med <code>attach()</code> (Alternativ Arbejdsgang)
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    I mange ældre R-eksempler (og i den måde nogle erfarne statistikere arbejder på) vil du se kode, hvor kolonnenavne bruges direkte uden <code>data$</code> foran. Dette gøres med <code>attach()</code>-funktionen.
+                </p>
+                <p class="mb-4 text-gray-600">
+                    <code>attach(dit_datasæt)</code> gør alle kolonner i dit datasæt tilgængelige i dit globale miljø, så du kan kalde dem direkte.
+                </p>
+
+                <h3 class="text-lg font-bold text-gray-700 mt-6 mb-2">Før vs. Efter <code>attach()</code></h3>
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-4 border rounded shadow-sm">
+                        <h4 class="font-bold text-gray-700 mb-2">Før (Sikker Metode)</h4>
+                        <pre><code class="language-r"># Lang, men sikker og eksplicit
+t.test(data_clean$alder_ved_diagnose ~ data_clean$behandling_faktor)
+</code></pre>
+                    </div>
+                    <div class="bg-white p-4 border rounded shadow-sm">
+                        <h4 class="font-bold text-gray-700 mb-2">Efter (Kort Metode)</h4>
+                        <pre><code class="language-r"># Gør kolonnerne tilgængelige
+attach(data_clean)
+
+# Koden er nu kortere
+t.test(alder_ved_diagnose ~ behandling_faktor)
+
+# Ryd op efter dig!
+detach(data_clean)
+</code></pre>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded-r-lg">
+                    <h4 class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-2"></i>ADVARSEL: Risikoen ved <code>attach()</code></h4>
+                    <p class="mt-2">Selvom <code>attach()</code> virker praktisk, er det en af de største kilder til fejl for nye R-brugere. Hvis du allerede har en variabel i dit miljø, der hedder det samme som en kolonne i dine data (f.eks. du har lavet en variabel <code>alder = 50</code>), vil <code>attach()</code> "maskere" din oprindelige variabel. R vil advare dig, men det kan føre til forvirring og forkerte resultater.</p>
+                    <p class="mt-2 font-semibold">Du skal ALTID køre <code>detach(dit_datasæt)</code>, så snart du er færdig med at bruge den vedhæftede data. Generelt anbefales det at bruge den mere eksplicitte <code>data$kolonne</code>-syntaks, da den er sikrere og gør din kode lettere at læse for andre.</p>
+                </div>
+            </section>
+
+            <!-- Section: Pro Tip -->
+            <section id="pro-tip-autocomplete" class="mb-12 scroll-mt-20">
+                <div class="pro-tip">
+                    <h4><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Pro Tip: Automatisk Udfyldning af Variabelnavne</h4>
+                    <p class="text-sky-800 mt-2">Den absolut nemmeste måde at undgå stavefejl i variabelnavne er at lade RStudio gøre arbejdet. Når du har indlæst dit datasæt (f.eks. <code>data_clean</code>), kan du gøre følgende:</p>
+                    <ol class="list-decimal list-inside text-sky-800 mt-2 pl-4 space-y-1">
+                        <li>Skriv navnet på dit datasæt efterfulgt af et dollartegn: <code>data_clean$</code></li>
+                        <li>Så snart du skriver <code>$</code>, popper en menu automatisk op med en liste over alle variable i dit datasæt.</li>
+                        <li>Begynd at skrive navnet på den variabel, du vil have, for at filtrere listen.</li>
+                        <li>Brug piletasterne til at vælge variablen og tryk <strong>Enter</strong> (eller klik på den med musen) for at indsætte den i dit script.</li>
+                    </ol>
+                    <p class="text-sky-800 mt-2">Dette er den professionelle arbejdsgang og sparer dig for utrolig meget tid og mange frustrationer!</p>
+                </div>
+            </section>
+
+            <!-- Section: Descriptive Statistics -->
+            <section id="descriptive" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-red-100 text-red-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-chart-pie"></i></span>
+                    Deskriptiv Statistik
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Deskriptiv statistik opsummerer og beskriver de vigtigste træk ved dine data.
+                </p>
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-4 border rounded shadow-sm">
+                        <h4 class="font-bold text-blue-700 mb-2">Gennemsnit & Median</h4>
+                        <p class="text-sm text-gray-600 mb-2">Gennemsnit er summen divideret med antallet. Median er den midterste værdi. Median er mere robust overfor ekstreme værdier (outliers).</p>
+                        <pre><code class="language-r"># Gennemsnit af alder
+mean(data_clean$alder_ved_diagnose, na.rm = TRUE)
+
+# Median af alder
+median(data_clean$alder_ved_diagnose, na.rm = TRUE)
+</code></pre>
+                        <p class="text-xs text-gray-500 mt-2"><code>na.rm = TRUE</code> fjerner manglende værdier (NA) før beregning.</p>
+                    </div>
+                    <div class="bg-white p-4 border rounded shadow-sm">
+                        <h4 class="font-bold text-blue-700 mb-2">Standardafvigelse (SD) & SEM</h4>
+                        <p class="text-sm text-gray-600 mb-2">SD måler spredningen i data. SEM (Standard Error of the Mean) måler usikkerheden på gennemsnittet.</p>
+                        <pre><code class="language-r"># Standardafvigelse
+sd(data_clean$alder_ved_diagnose, na.rm = TRUE)
+
+# SEM (manuel beregning)
+sd_alder <- sd(data_clean$alder_ved_diagnose, na.rm = TRUE)
+n_alder <- sum(!is.na(data_clean$alder_ved_diagnose))
+sem_alder <- sd_alder / sqrt(n_alder)
+print(sem_alder)
+</code></pre>
+                    </div>
+                </div>
+                <div class="bg-white p-4 border rounded shadow-sm">
+                    <h4 class="font-bold text-blue-700 mb-2">Fuld oversigt med <code>summary()</code></h4>
+                    <p class="text-sm text-gray-600 mb-2">Den hurtigste måde at få et overblik over en variabel eller et helt datasæt.</p>
+                    <pre><code class="language-r"># Overblik over en enkelt variabel
+summary(data_clean$alder_ved_diagnose)
+
+# Overblik over hele datasættet
+summary(data_clean)
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Section: Tables -->
+            <section id="tables" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-teal-100 text-teal-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-table"></i></span>
+                    Tabeller: Fra Simpel til "Table 1"
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Tabeller er essentielle for at præsentere resultater. Pakken <code>gtsummary</code> er fantastisk til at lave flotte, publikationsklare tabeller.
+                </p>
+                
+                <h3 class="font-bold text-gray-700 mt-4 mb-2">Niveau 1: Simple tællinger med <code>table()</code></h3>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-4">
+<pre><code class="language-r"># Tæl antal i hver behandlingsgruppe
+table(data_clean$behandling_faktor)
+
+# Krydstabel (2x2) for behandling vs. aldersgruppe
+table(data_clean$behandling_faktor, data_clean$alders_gruppe)
+</code></pre>
+                </div>
+
+                <h3 class="font-bold text-gray-700 mt-4 mb-2">Niveau 2: Avanceret "Table 1" med <code>gtsummary</code></h3>
+                <p class="text-sm text-gray-600 mb-2">Denne kode laver en komplet demografisk tabel ("Table 1"), der sammenligner patientkarakteristika på tværs af behandlingsgrupper, inklusiv p-værdier.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-4">
+<pre><code class="language-r"># Vælg de relevante variable
+table1_data <- data_clean %>%
+  select(behandling_faktor, alder_ved_diagnose, køn, tumor_stadium_gruppe)
+
+# Byg tabellen
+table1 <- table1_data %>%
+  tbl_summary(
+    by = behandling_faktor,                     # Opdel efter behandlingsgruppe
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",       # Gennemsnit (SD) for tal
+      all_categorical() ~ "{n} / {N} ({p}%)"    # Antal / Total (%) for kategorier
+    ),
+    digits = all_continuous() ~ 1,              # 1 decimal for kontinuerlige variable
+    label = list(                               # Pænere navne til kolonner
+        alder_ved_diagnose ~ "Alder ved diagnose",
+        køn ~ "Køn",
+        tumor_stadium_gruppe ~ "Tumorstadium"
+    )
+  ) %>%
+  add_p() %>%                                   # Tilføj p-værdi for sammenligning
+  add_overall() %>%                             # Tilføj "Total" kolonne
+  bold_labels()
+
+# Vis tabellen i RStudio Viewer
+table1
+</code></pre>
+                </div>
+                 <div class="syntax-box">
+                    <span class="title">Syntaks: <code>tbl_summary</code></span>
+                    <code>data %>% tbl_summary(by = gruppe, ...) %>% add_p()</code>
+                </div>
+            </section>
+
+            <!-- Section: Statistics -->
+            <section id="statistics" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-red-100 text-red-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-scale-balanced"></i></span>
+                    Statistiske Tests
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Valg af test afhænger af, hvilken type variable du sammenligner (kontinuert vs. kategorisk).
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <!-- T-test -->
+                    <div class="bg-white p-4 border rounded shadow-sm">
+                        <h4 class="font-bold text-blue-700 mb-2">Kontinuert vs. Kategorisk (T-test)</h4>
+                        <p class="text-sm text-gray-600 mb-2">Bruges til at sammenligne gennemsnittet mellem <strong>to grupper</strong>. F.eks. "Er der forskel på gennemsnitlig alder i de to behandlingsarme?"</p>
+                        <pre><code class="language-r"># T-test (hvis data er normalfordelt)
+t.test(alder_ved_diagnose ~ behandling_faktor, data = data_clean)
+
+# Wilcoxon test (hvis data IKKE er normalfordelt)
+wilcox.test(alder_ved_diagnose ~ behandling_faktor, data = data_clean)
+</code></pre>
+                        <div class="syntax-box">
+                            <span class="title">Syntaks: T-test</span>
+                            <code>t.test(kontinuert_var ~ gruppe_var, data = dit_data)</code>
+                        </div>
+                    </div>
+
+                    <!-- Chi-square -->
+                    <div class="bg-white p-4 border rounded shadow-sm">
+                        <h4 class="font-bold text-blue-700 mb-2">Kategorisk vs. Kategorisk (Chi²-test)</h4>
+                        <p class="text-sm text-gray-600 mb-2">Bruges til at teste for en sammenhæng mellem <strong>to kategoriske variable</strong>. F.eks. "Er der en sammenhæng mellem behandlingsgruppe og køn?"</p>
+                        <pre><code class="language-r"># Lav en krydstabel først
+tabel_koen <- table(data_clean$behandling_faktor, data_clean$køn)
+print(tabel_koen)
+
+# Chi-square test (hvis alle celler i tabellen har >= 10 obs)
+chisq.test(tabel_koen)
+
+# Fisher's Exact test (hvis nogle celler har < 10 obs)
+fisher.test(tabel_koen)
+</code></pre>
+                        <div class="syntax-box">
+                            <span class="title">Syntaks: Chi²-test</span>
+                            <code>tabel <- table(data$var1, data$var2)</code><br>
+                            <code>chisq.test(tabel)</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Correlation -->
+            <section id="correlation" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-orange-100 text-orange-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-link"></i></span>
+                    Korrelation
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Korrelationstesten undersøger, om der er en lineær sammenhæng mellem <strong>to kontinuerlige variable</strong>. F.eks. "Hænger alder sammen med tumorstørrelse?"
+                </p>
+                <div class="bg-white p-4 border rounded shadow-sm">
+                    <h4 class="font-bold text-blue-700 mb-2">Kontinuert vs. Kontinuert (Korrelationstest)</h4>
+                    <pre><code class="language-r"># cor.test(variabel1, variabel2, method = "...")
+# method="pearson" for lineær sammenhæng (normalfordelte data)
+# method="spearman" for ikke-lineær sammenhæng (ikke-normalfordelte data)
+
+cor.test(data_clean$alder_ved_diagnose, data_clean$tumor_størrelse, method = "pearson")
+</code></pre>
+                    <p class="text-sm text-gray-600 mt-2">Outputtet giver en p-værdi og en korrelationskoefficient (r). En r-værdi tæt på 1 eller -1 indikerer en stærk sammenhæng, mens en værdi tæt på 0 indikerer en svag sammenhæng.</p>
+                    <div class="syntax-box">
+                        <span class="title">Syntaks: Korrelation</span>
+                        <code>cor.test(data$var1, data$var2, method = "pearson")</code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Survival Analysis -->
+            <section id="survival" class="mb-12 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-cyan-100 text-cyan-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-heart-pulse"></i></span>
+                    Overlevelsesanalyse: En Komplet Arbejdsgang
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    Denne sektion viser en komplet arbejdsgang for overlevelsesanalyse, fra rådata til en færdig, publikationsklar graf. Vi bruger generiske variabelnavne (f.eks. <code>start_date</code>, <code>event</code>), som du kan erstatte med dine egne kolonnenavne.
+                </p>
+
+                <div class="pro-tip mb-8">
+                    <h4><i class="fa-solid fa-lightbulb mr-2"></i>Forudsætninger for dine data</h4>
+                    <p class="text-sky-800 mt-2">For at følge denne guide, skal dit datasæt (vi kalder det <code>mit_data</code>) indeholde:</p>
+                    <ul class="list-disc list-inside text-sky-800 mt-2 pl-4">
+                        <li>En <strong>startdato</strong> (f.eks. <code>diagnose_dato</code>) og en <strong>slutdato</strong> (f.eks. <code>sidste_opfølgning_dato</code>). Disse skal være i dato-format.</li>
+                        <li>En <strong>event-variabel</strong> (f.eks. <code>dødsfald</code>), som er numerisk (typisk <strong>1</strong> for event/død, <strong>0</strong> for censureret).</li>
+                        <li>En <strong>gruppe-variabel</strong> (f.eks. <code>behandlingsgruppe</code>), som du vil sammenligne. Denne bør konverteres til en <code>factor</code>.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 1: Forberedelse af Data</h3>
+                <p class="text-sm text-gray-600 mb-2">Det første skridt er at beregne overlevelsestiden og sikre, at dine variable har de korrekte formater. Vi bruger <code>dplyr</code> og <code>lubridate</code> til dette.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-8">
+                    <div class="code-header">
+                        <span>R Script: Databehandling</span>
+                        <button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white py-1 px-3 rounded transition" onclick="copyCode(this)">Kopier</button>
+                    </div>
+<pre><code class="language-r"># Antag at dit datasæt hedder 'mit_data'
+# Sørg for at dine datokolonner er i datoformat. Hvis ikke, konverter dem:
+# mit_data$start_date <- as.Date(mit_data$start_date)
+# mit_data$end_date <- as.Date(mit_data$end_date)
+
+data_til_analyse <- mit_data %>%
+  mutate(
+    # 1. Beregn overlevelsestid i dage
+    # as.numeric() konverterer forskellen fra et 'difftime' objekt til et tal.
+    overlevelses_tid_dage = as.numeric(end_date - start_date),
+
+    # 2. Sørg for at event-variablen er numerisk (1 for event, 0 for censur)
+    # Dette er et eksempel, hvis din variabel f.eks. er tekst ("Død"/"Levende")
+    event_numerisk = ifelse(event_kolonne == "Død", 1, 0),
+
+    # 3. Konverter din grupperingsvariabel til en factor
+    # Dette er afgørende for, at R forstår, at det er en kategorisk variabel.
+    # Angiv rækkefølgen med 'levels' for at styre, hvad der er referencegruppen.
+    factor_one = factor(din_gruppe_variabel, levels = c("Kontrol", "Behandling A"))
+  )
+
+# Tjek at de nye variable ser korrekte ud
+glimpse(data_til_analyse)
+</code></pre>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 2: Opret et Survival-objekt (<code>Surv</code>)</h3>
+                <p class="text-sm text-gray-600 mb-2">Nu fortæller vi R, hvad der er tid og hvad der er event.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+<pre><code class="language-r"># Opret survival objekt
+surv_obj <- Surv(time = data_til_analyse$overlevelses_tid_dage, event = data_til_analyse$event_numerisk)
+</code></pre>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 3: Fit Modellen og Få Nøgletal</h3>
+                <p class="text-sm text-gray-600 mb-2">Med <code>survfit()</code> kan vi fitte Kaplan-Meier modellen og udtrække vigtige tal som median- og 1-års overlevelse.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+<pre><code class="language-r"># Fit en model, der sammenligner grupperne i 'factor_one'
+km_fit <- survfit(surv_obj ~ factor_one, data = data_til_analyse)
+
+# --- Få Median Overlevelse ---
+# Print blot fit-objektet. Kig efter 'median' og '0.95LCL', '0.95UCL' i outputtet.
+print(km_fit)
+
+# --- Få 1-års Overlevelse ---
+# Brug summary() med 'times' argumentet (i dage).
+# 365.25 dage = 1 år. Kig efter 'survival' kolonnen i outputtet.
+summary(km_fit, times = 365.25)
+</code></pre>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 4: Log-Rank Testen (Sammenligning af Kurver)</h3>
+                <p class="text-sm text-gray-600 mb-2">Log-rank testen er den statistiske test, der afgør, om der er en signifikant forskel mellem overlevelseskurverne for de forskellige grupper.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+<pre><code class="language-r"># Udfør log-rank testen direkte
+log_rank_test <- survdiff(surv_obj ~ factor_one, data = data_til_analyse)
+print(log_rank_test) # Giver en p-værdi
+</code></pre>
+                </div>
+                <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mb-8">
+                    <h4 class="font-bold"><i class="fa-solid fa-pen-to-square mr-2"></i>Sådan Præsenteres Resultatet</h4>
+                    <p class="mt-2">Du kan rapportere resultatet af log-rank testen i din tekst, f.eks.:</p>
+                    <p class="mt-2 italic">"En Kaplan-Meier analyse blev udført for at sammenligne overlevelsen mellem grupperne. Log-rank testen viste en statistisk signifikant forskel i overlevelse (p < 0.001)."</p>
+                    <p class="mt-2 text-xs">Husk, at <code>ggsurvplot</code> med <code>pval = TRUE</code> også viser denne p-værdi direkte på grafen.</p>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-700 mt-8 mb-4">Trin 5: Den Publikationsklare Graf</h3>
+                <p class="text-sm text-gray-600 mb-2">Nu samler vi det hele i en flot graf med <code>ggsurvplot</code>, inklusiv alle de elementer, du har brug for til en publikation.</p>
+                <div class="rounded-lg overflow-hidden border border-gray-300 mb-6">
+                    <div class="code-header">
+                        <span>R Script: Komplet Kaplan-Meier Plot</span>
+                        <button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white py-1 px-3 rounded transition" onclick="copyCode(this)">Kopier</button>
+                    </div>
+<pre><code class="language-r">ggsurvplot(
+  km_fit,                              # Modellen vi fittiede i trin 3
+  data = data_til_analyse,             # **VIGTIGT**: Husk altid data-argumentet!
+  
+  # --- Indhold og Statistik ---
+  pval = TRUE,                         # Vis log-rank p-værdi på grafen
+  conf.int = TRUE,                     # Vis 95% konfidensintervaller
+  censor = TRUE,                       # Vis censureringer som små krydser (+) på kurverne
+  
+  # --- Risk Table ---
+  risk.table = TRUE,                   # Tilføj "Number at Risk" tabel
+  risk.table.title = "Antal i risiko", # Titel for tabellen
+  tables.height = 0.2,                 # Juster højden
+  
+  # --- Titler og Akser ---
+  title = "Kaplan-Meier Overlevelseskurve",
+  xlab = "Tid (dage)",
+  ylab = "Overlevelsessandsynlighed",
+  
+  # --- Legende ---
+  legend.title = "Behandlingsgruppe",
+  legend.labs = c("Kontrol", "Behandling A"), # Skal matche rækkefølgen i din factor
+  
+  # --- Udseende ---
+  palette = c("grey50", "darkred"),    # Vælg farver til "Kontrol" og "Behandling A"
+  ggtheme = theme_classic()            # Et rent tema, der er godt til publikationer
+)
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Section: Graphics -->
+            <section id="graphics" class="mb-20 scroll-mt-20">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="bg-purple-100 text-purple-700 p-2 rounded-lg text-lg"><i class="fa-solid fa-chart-line"></i></span>
+                    Grafik & Plots med <code>ggplot2</code>
+                </h2>
+                <p class="mb-4 text-gray-600">
+                    <code>ggplot2</code> er en ekstremt kraftfuld pakke til at lave stort set enhver type graf. Strukturen er altid den samme: <code>ggplot(data, aes(x=..., y=...)) + geom_...()</code>.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <!-- Boxplot -->
+                    <div class="bg-white p-4 border rounded shadow-sm">
+                        <h4 class="font-bold text-blue-700 mb-2">Boxplot (Sammenlign grupper)</h4>
+                        <pre><code class="language-r">ggplot(data_clean, aes(x = behandling_faktor, y = alder_ved_diagnose, fill = behandling_faktor)) +
+  geom_boxplot() +
+  labs(
+    title = "Aldersfordeling pr. Behandling",
+    x = "Behandlingsgruppe",
+    y = "Alder ved diagnose"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") # Skjul legend
+</code></pre>
+                    </div>
+
+                    <!-- Scatterplot -->
+                    <div class="bg-white p-4 border rounded shadow-sm">
+                        <h4 class="font-bold text-blue-700 mb-2">Scatterplot (Sammenhæng)</h4>
+                        <pre><code class="language-r">ggplot(data_clean, aes(x = alder_ved_diagnose, y = tumor_størrelse)) +
+  geom_point(alpha = 0.6) + # alpha gør punkter gennemsigtige
+  geom_smooth(method = "lm", se = FALSE) + # Tilføj tendenslinje
+  labs(
+    title = "Sammenhæng mellem Alder og Tumorstørrelse",
+    x = "Alder ved diagnose",
+    y = "Tumorstørrelse (mm)"
+  ) +
+  theme_light()
+</code></pre>
+                    </div>
+                </div>
+                 <div class="syntax-box">
+                    <span class="title">Syntaks: ggplot2</span>
+                    <code>ggplot(data, aes(x = [x-akse], y = [y-akse])) + </code><br>
+                    <code>  geom_point()  # For scatterplot</code><br>
+                    <code>  geom_boxplot() # For boxplot</code>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="text-center text-gray-500 text-sm pb-10">
+                <p>Genereret til FSK Forskningstræning 2025.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
+    
+    <script>
+        // Copy functionality
+        function copyCode(btn) {
+            const pre = btn.closest('.code-header').nextElementSibling;
+            const code = pre.querySelector('code').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            const originalText = btn.innerText;
+            btn.innerText = 'Kopieret!';
+            btn.classList.add('bg-green-600', 'hover:bg-green-500');
+            btn.classList.remove('bg-gray-600', 'hover:bg-gray-500');
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.classList.remove('bg-green-600', 'hover:bg-green-500');
+                btn.classList.add('bg-gray-600', 'hover:bg-gray-500');
+            }, 2000);
+        }
+
+        // Mobile Menu
+        const btn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        btn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            if(!sidebar.classList.contains('hidden')){
+                sidebar.classList.add('fixed', 'inset-0', 'z-40', 'pt-16');
+                sidebar.classList.remove('sticky', 'h-screen');
+            } else {
+                sidebar.classList.remove('fixed', 'inset-0', 'z-40', 'pt-16');
+                sidebar.classList.add('sticky', 'h-screen');
+            }
+        });
+
+        // Scroll highlight
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.sidebar-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                if (scrollY >= section.offsetTop - 150) current = section.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

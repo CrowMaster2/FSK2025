@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FSK Forskningstræning - R Statistics Guide</title>
+<style>
+body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; }
+h1 { color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; }
+h2 { color: #2874a6; margin-top: 30px; border-bottom: 1px solid #aed6f1; padding-bottom: 5px; }
+h3 { color: #3498db; margin-top: 20px; }
+code { background-color: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Consolas, monospace; font-size: 10pt; }
+pre { background-color: #f8f9fa; border: 1px solid #dee2e6; border-left: 4px solid #3498db; padding: 15px; overflow-x: auto; font-family: Consolas, monospace; font-size: 10pt; }
+.note { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin: 15px 0; }
+.tip { background-color: #d4edda; border-left: 4px solid #28a745; padding: 10px 15px; margin: 15px 0; }
+table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+th, td { border: 1px solid #dee2e6; padding: 8px 12px; text-align: left; }
+th { background-color: #3498db; color: white; }
+tr:nth-child(even) { background-color: #f8f9fa; }
+.formula { font-style: italic; text-align: center; margin: 15px 0; padding: 10px; background-color: #f8f9fa; }
+</style>
+</head>
+<body>
+
+<h1>FSK Forskningstræning - Statistik i R</h1>
+<p><strong>R Commands Guide - Dag 1</strong></p>
+<p>Denne guide forklarer de statistiske metoder og R kommandoer fra kurset.</p>
+
+<hr>
+
+<h2>1. Installation af R Pakker - Komplet Guide</h2>
+
+<p>R pakker er tilføjelser der giver ekstra funktionalitet. Du skal installere dem <strong>én gang</strong>, derefter bare indlæse dem.</p>
+
+<h3>1.1 Metode 1: Via RStudio Menu (Nemmest)</h3>
+
+<ol>
+<li>Åbn <strong>RStudio</strong></li>
+<li>Klik på <strong>Tools</strong> i menulinjen</li>
+<li>Vælg <strong>Install Packages...</strong></li>
+<li>I "Packages" feltet, skriv pakkenavnet (fx <code>survival</code>)</li>
+<li>Sørg for at <strong>"Install dependencies"</strong> er markeret ✓</li>
+<li>Klik <strong>Install</strong></li>
+</ol>
+
+<div class="tip">
+<strong>Tip:</strong> Du kan installere flere pakker på én gang ved at adskille dem med komma: <code>survival, survminer, ggplot2</code>
+</div>
+
+<h3>1.2 Metode 2: Via Console (Anbefalet)</h3>
+
+<p>Kopier og indsæt følgende kode i RStudio Console (nederste venstre panel):</p>
+
+<pre>
+# ============================================
+# INSTALLER ALLE NØDVENDIGE PAKKER
+# Kør denne kode KUN ÉN GANG
+# ============================================
+
+# Liste over pakker til kurset
+pakker <- c(
+  "readxl",      # Læser Excel-filer (.xls, .xlsx)
+  "survival",    # Overlevelsesanalyse (Kaplan-Meier, Cox)
+  "survminer",   # Flotte overlevelseskurver
+  "ggplot2",     # Professionelle grafer
+  "dplyr",       # Datamanipulation
+  "tidyverse",   # Samling af nyttige pakker
+  "tidyr",       # Data reshaping
+  "readr",       # Læser CSV filer
+  "ggpubr",      # Publikationsklare grafer
+  "corrplot",    # Korrelationsplot
+  "car",         # Statistiske tests
+  "MASS",        # Statistiske funktioner
+  "broom"        # Pæn output fra statistiske tests
+)
+
+# Installer alle pakker
+install.packages(pakker, dependencies = TRUE)
+
+# Bekræft installation
+cat("\n✓ Installation færdig!\n")
+</pre>
+
+<div class="note">
+<strong>Vigtigt:</strong> Installationen kan tage 5-15 minutter første gang. Vent til du ser <code>&gt;</code> prompt igen i Console.
+</div>
+
+<h3>1.3 Fejlfinding ved Installation</h3>
+
+<p><strong>Problem: "Package 'xxx' is not available"</strong></p>
+<pre>
+# Opdater pakkelisten først
+options(repos = c(CRAN = "https://cloud.r-project.org/"))
+install.packages("pakkenavn")
+</pre>
+
+<p><strong>Problem: "Cannot remove prior installation"</strong></p>
+<pre>
+# Luk alle R sessioner og prøv igen, eller:
+install.packages("pakkenavn", lib = .libPaths()[1])
+</pre>
+
+<p><strong>Problem: Kompileringsfejl (Rtools)</strong></p>
+<ol>
+<li>Download Rtools fra: <code>https://cran.r-project.org/bin/windows/Rtools/</code></li>
+<li>Installer Rtools</li>
+<li>Genstart RStudio</li>
+<li>Prøv installation igen</li>
+</ol>
+
+<h3>1.4 Tjek om Pakker er Installeret</h3>
+
+<pre>
+# Tjek installerede pakker
+installed.packages()[, "Package"]
+
+# Tjek specifik pakke
+"survival" %in% installed.packages()[, "Package"]
+# TRUE = installeret, FALSE = ikke installeret
+
+# Se version af pakke
+packageVersion("survival")
+</pre>
+
+<hr>
+
+<h2>2. Indlæsning af Pakker (Hver Session)</h2>
+
+<p>Efter installation skal du <strong>indlæse</strong> pakkerne HVER gang du starter RStudio:</p>
+
+<pre>
+# ============================================
+# INDLÆS PAKKER - Kør dette HVER gang du starter R
+# ============================================
+
+library(readxl)      # Læser Excel-filer
+library(survival)    # Overlevelsesanalyse
+library(survminer)   # Flotte overlevelseskurver
+library(ggplot2)     # Grafer og plots
+library(dplyr)       # Datamanipulation
+</pre>
+
+<div class="tip">
+<strong>Tip:</strong> Gem denne kode øverst i dit R script, så du altid har pakkerne klar.
+</div>
+
+<h3>Forskel på install.packages() og library()</h3>
+
+<table>
+<tr><th>Kommando</th><th>Hvad gør den?</th><th>Hvor ofte?</th></tr>
+<tr><td><code>install.packages("x")</code></td><td>Downloader og installerer pakken på din computer</td><td>Kun ÉN gang</td></tr>
+<tr><td><code>library(x)</code></td><td>Indlæser pakken så du kan bruge den</td><td>HVER gang du starter R</td></tr>
+</table>
+
+<div class="note">
+<strong>Analogi:</strong> <code>install.packages()</code> er som at købe en bog og sætte den på hylden. <code>library()</code> er som at tage bogen ned fra hylden for at læse den.
+</div>
+
+<h3>Pakker Brugt i Dette Kursus</h3>
+
+<table>
+<tr><th>Pakke</th><th>Formål</th><th>Vigtige Funktioner</th></tr>
+<tr><td><code>readxl</code></td><td>Læse Excel-filer</td><td><code>read_excel()</code></td></tr>
+<tr><td><code>survival</code></td><td>Overlevelsesanalyse</td><td><code>Surv()</code>, <code>survfit()</code>, <code>coxph()</code></td></tr>
+<tr><td><code>survminer</code></td><td>Overlevelsesplots</td><td><code>ggsurvplot()</code></td></tr>
+<tr><td><code>ggplot2</code></td><td>Grafer</td><td><code>ggplot()</code>, <code>geom_*()</code></td></tr>
+<tr><td><code>dplyr</code></td><td>Data manipulation</td><td><code>filter()</code>, <code>select()</code>, <code>mutate()</code></td></tr>
+</table>
+
+<hr>
+
+<h2>2. Indlæsning af Data fra Excel</h2>
+
+<h3>Kommando: <code>read_excel()</code></h3>
+
+<p><strong>Formål:</strong> Indlæser data fra en Excel-fil (.xls eller .xlsx) ind i R.</p>
+
+<pre>
+# Indlæs Excel-fil
+data <- read_excel("G:/My Drive/Documents-Work/FSK_2025/01_højde_testsæt.xls")
+
+# Se de første rækker
+head(data)
+
+# Se struktur af data
+str(data)
+
+# Se alle variabelnavne
+names(data)
+</pre>
+
+<div class="note">
+<strong>Bemærk:</strong> Brug <code>/</code> eller <code>\\</code> i filstier i R, ikke <code>\</code> alene.
+</div>
+
+<hr>
+
+<h2>3. Deskriptiv Statistik</h2>
+
+<h3>3.1 Gennemsnit (Mean)</h3>
+
+<p><strong>Kommando:</strong> <code>mean()</code></p>
+<p><strong>Formål:</strong> Beregner gennemsnittet af en række tal.</p>
+
+<div class="formula">Gennemsnit = (x₁ + x₂ + ... + xₙ) / n</div>
+
+<pre>
+# Eksempel med data fra slides
+data <- c(3, 5, 8, 20, 36, 64, 256)
+mean(data)
+# Resultat: 56
+
+# Med en variabel fra datasæt
+mean(height_data$Height)
+
+# Hvis der er manglende værdier (NA)
+mean(height_data$Height, na.rm = TRUE)
+</pre>
+
+<h3>3.2 Median</h3>
+
+<p><strong>Kommando:</strong> <code>median()</code></p>
+<p><strong>Formål:</strong> Finder den midterste værdi når data er sorteret.</p>
+
+<pre>
+data <- c(3, 5, 8, 20, 36, 64, 256)
+median(data)
+# Resultat: 20
+
+# Median er robust overfor outliers (fx 256)
+</pre>
+
+<div class="tip">
+<strong>Klinisk relevans:</strong> Median er ofte bedre end gennemsnit når data har outliers (fx indkomst, overlevelsestid).
+</div>
+
+<h3>3.3 Standardafvigelse (SD)</h3>
+
+<p><strong>Kommando:</strong> <code>sd()</code></p>
+<p><strong>Formål:</strong> Måler spredningen af data omkring gennemsnittet.</p>
+
+<pre>
+height <- c(194, 176, 182, 168, 169, 175, 183)
+sd(height)
+# Resultat: ca. 9.04
+</pre>
+
+<p><strong>Fortolkning:</strong></p>
+<ul>
+<li>~68% af data ligger inden for ±1 SD fra gennemsnittet</li>
+<li>~95% af data ligger inden for ±2 SD fra gennemsnittet</li>
+</ul>
+
+<h3>3.4 Standard Error of the Mean (SEM)</h3>
+
+<p><strong>Formål:</strong> Måler præcisionen af stikprøvens gennemsnit som estimat for populationens gennemsnit.</p>
+
+<div class="formula">SEM = SD / √n</div>
+
+<pre>
+height <- c(194, 176, 182, 168, 169, 175, 183)
+n <- length(height)
+sem <- sd(height) / sqrt(n)
+sem
+# Resultat: ca. 3.42
+</pre>
+
+<div class="note">
+<strong>SD vs SEM:</strong>
+<ul>
+<li><strong>SD</strong> beskriver variationen i dine data</li>
+<li><strong>SEM</strong> beskriver usikkerheden på dit gennemsnit</li>
+</ul>
+</div>
+
+<h3>3.5 Samlet Oversigt</h3>
+
+<p><strong>Kommando:</strong> <code>summary()</code></p>
+
+<pre>
+summary(height)
+#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+#  168.0   172.0   176.0   178.1   183.0   194.0
+</pre>
+
+<hr>
+
+<h2>4. Konfidensinterval</h2>
+
+<p><strong>Formål:</strong> Et interval hvor den "ægte" populationsværdi sandsynligvis befinder sig.</p>
+
+<div class="formula">95% CI = Gennemsnit ± 1.96 × SEM</div>
+
+<h3>Manuel beregning:</h3>
+
+<pre>
+height <- c(194, 176, 182, 168, 169, 175, 183)
+
+n <- length(height)
+mean_val <- mean(height)
+sd_val <- sd(height)
+sem <- sd_val / sqrt(n)
+
+# 95% Konfidensinterval
+ci_lower <- mean_val - 1.96 * sem
+ci_upper <- mean_val + 1.96 * sem
+
+cat("Gennemsnit:", mean_val, "\n")
+cat("95% CI:", ci_lower, "-", ci_upper, "\n")
+</pre>
+
+<h3>Automatisk med t.test():</h3>
+
+<pre>
+t.test(height)
+
+# Output inkluderer:
+# - 95% confidence interval
+# - mean of x
+# - t-value og p-value
+</pre>
+
+<h3>Konfidensinterval opdelt på grupper:</h3>
+
+<pre>
+# CI for vægt opdelt på køn
+t.test(Weight ~ Gender, data = height_data)
+</pre>
+
+<div class="tip">
+<strong>Fortolkning:</strong> Hvis 95% CI ikke inkluderer en bestemt værdi (fx 175), er der signifikant forskel fra den værdi (p < 0.05).
+</div>
+
+<hr>
+
+<h2>5. T-test</h2>
+
+<p><strong>Formål:</strong> Sammenligner gennemsnit mellem to grupper eller mod en kendt værdi.</p>
+
+<h3>5.1 One-sample t-test</h3>
+<p>Sammenligner stikprøvens gennemsnit med en kendt værdi.</p>
+
+<pre>
+# Er lokalet højere end danske gennemsnit (175 cm)?
+height <- c(180, 172, 174, 179, 188, 173, 177, 189, 166, 192)
+t.test(height, mu = 175)
+
+# Output:
+# t = 1.84, df = 9, p-value = 0.099
+# Hvis p < 0.05: signifikant forskel
+</pre>
+
+<h3>5.2 Two-sample t-test (uafhængige grupper)</h3>
+<p>Sammenligner gennemsnit mellem to grupper.</p>
+
+<pre>
+# Sammenlign højde mellem køn
+kvinder <- c(169, 171, 167, 170, 177, 164, 165, 169, 171, 169)
+maend <- c(180, 172, 174, 179, 188, 173, 177, 189, 166, 192)
+
+t.test(kvinder, maend)
+
+# Eller med datasæt (Gender: 0=kvinde, 1=mand)
+t.test(Height ~ Gender, data = height_data)
+</pre>
+
+<h3>5.3 Paired t-test</h3>
+<p>Sammenligner før/efter målinger på samme personer.</p>
+
+<pre>
+before <- c(120, 130, 125, 140, 135)
+after <- c(115, 125, 120, 130, 130)
+
+t.test(before, after, paired = TRUE)
+</pre>
+
+<div class="note">
+<strong>Forudsætninger for t-test:</strong>
+<ul>
+<li>Data skal være tilnærmelsesvis normalfordelte</li>
+<li>Variansen skal være ens i begge grupper (kan testes)</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>6. Chi-square Test (χ²) og 2×2 Tabeller</h2>
+
+<p><strong>Formål:</strong> Tester om der er sammenhæng mellem to kategoriske variable.</p>
+<p><strong>Princip:</strong> Sammenligner observerede værdier med forventede værdier.</p>
+
+<h3>Eksempel fra slides:</h3>
+
+<table>
+<tr><th></th><th>T1-T2</th><th>T3-T4</th><th>Total</th></tr>
+<tr><td><strong>Mænd</strong></td><td>134</td><td>93</td><td>227</td></tr>
+<tr><td><strong>Kvinder</strong></td><td>32</td><td>14</td><td>46</td></tr>
+<tr><td><strong>Total</strong></td><td>166</td><td>107</td><td>273</td></tr>
+</table>
+
+<h3>Chi-square test:</h3>
+
+<pre>
+# Opret 2x2 tabel
+observed <- matrix(c(134, 32, 93, 14),
+                   nrow = 2,
+                   byrow = TRUE,
+                   dimnames = list(
+                     Gender = c("Mænd", "Kvinder"),
+                     T_stage = c("T1-T2", "T3-T4")
+                   ))
+
+print(observed)
+
+# Chi-square test
+chisq.test(observed)
+
+# Output:
+# X-squared = 1.47, df = 1, p-value = 0.225
+</pre>
+
+<h3>Fisher's Exact Test:</h3>
+<p><strong>Brug denne når en celle har færre end 10 observationer!</strong></p>
+
+<pre>
+fisher.test(observed)
+</pre>
+
+<h3>Med datasæt:</h3>
+
+<pre>
+# Lav krydstabel
+tabel <- table(data$Gender, data$T_stage)
+
+# Chi-square test
+chisq.test(tabel)
+
+# Procenter per række
+prop.table(tabel, margin = 1) * 100
+</pre>
+
+<div class="tip">
+<strong>Fortolkning:</strong>
+<ul>
+<li>p < 0.05: Der ER signifikant sammenhæng mellem variablene</li>
+<li>p ≥ 0.05: Der er IKKE signifikant sammenhæng</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>7. Binomial Test</h2>
+
+<p><strong>Formål:</strong> Tester om en observeret proportion afviger signifikant fra en forventet værdi.</p>
+
+<pre>
+# 30 successes ud af 100 forsøg
+# Forventet: 50%
+binom.test(30, 100, p = 0.5)
+
+# Output:
+# p-value = 0.00006
+# 95% CI: 0.21 - 0.40
+</pre>
+
+<hr>
+
+<h2>8. Overlevelsesanalyse - Kaplan-Meier</h2>
+
+<p><strong>Formål:</strong> Estimerer overlevelsessandsynlighed over tid, håndterer censurerede data.</p>
+
+<h3>8.1 Grundlæggende Kaplan-Meier</h3>
+
+<pre>
+library(survival)
+library(survminer)
+
+# Data: tid og event (1 = død, 0 = censureret/i live)
+time <- c(1, 3, 5, 5, 7, 8, 9, 9, 11, 12, 15, 18, 20, 25)
+status <- c(0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1)
+
+# Opret survival objekt
+surv_obj <- Surv(time, status)
+
+# Fit Kaplan-Meier model
+km_fit <- survfit(surv_obj ~ 1)
+
+# Vis resultater
+summary(km_fit)
+print(km_fit)  # Viser median overlevelse
+</pre>
+
+<h3>8.2 Plot Kaplan-Meier kurve</h3>
+
+<pre>
+# Simpelt plot
+plot(km_fit,
+     xlab = "Tid (måneder)",
+     ylab = "Overlevelsessandsynlighed",
+     main = "Kaplan-Meier Overlevelseskurve")
+
+# Flot plot med survminer
+ggsurvplot(km_fit,
+           risk.table = TRUE,      # Vis antal i risiko
+           conf.int = TRUE,        # Vis konfidensinterval
+           xlab = "Tid (måneder)",
+           ylab = "Overlevelse")
+</pre>
+
+<h3>8.3 Kaplan-Meier opdelt på grupper</h3>
+
+<pre>
+# Med datasæt
+km_by_group <- survfit(Surv(OS, Mors) ~ Factor0, data = surv_data)
+
+# Plot med p-værdi (log-rank)
+ggsurvplot(km_by_group,
+           data = surv_data,
+           pval = TRUE,            # Viser log-rank p-værdi!
+           risk.table = TRUE,
+           conf.int = TRUE,
+           legend.labs = c("Faktor = 0", "Faktor = 1"),
+           title = "Overlevelse opdelt på faktor")
+</pre>
+
+<div class="note">
+<strong>Censurering:</strong> Patienter der stadig er i live ved studieafslutning eller tabt til follow-up markeres som censureret (status = 0). De bidrager til "at risk" gruppen indtil de censureres.
+</div>
+
+<hr>
+
+<h2>9. Log-rank Test</h2>
+
+<p><strong>Formål:</strong> Tester om der er signifikant forskel mellem overlevelseskurver.</p>
+<p><strong>Princip:</strong> Sammenligner observeret antal events med forventet antal i hver gruppe.</p>
+
+<pre>
+# Log-rank test
+survdiff(Surv(OS, Mors) ~ Factor0, data = surv_data)
+
+# Output eksempel:
+#                 N Observed Expected (O-E)^2/E
+# Factor0=0      18       14      8.9      2.95
+# Factor0=1      22       13     18.1      1.45
+#
+# Chisq= 4.4  on 1 degrees of freedom, p= 0.036
+</pre>
+
+<div class="tip">
+<strong>Fortolkning:</strong>
+<ul>
+<li>p < 0.05: Signifikant forskel mellem kurverne</li>
+<li>Kig på kurverne: Hvilken gruppe klarer sig bedst?</li>
+</ul>
+</div>
+
+<div class="note">
+<strong>Advarsel:</strong> Log-rank test har problemer når kurverne krydser hinanden! I så fald overvej andre tests.
+</div>
+
+<hr>
+
+<h2>10. Cox Regression</h2>
+
+<p><strong>Formål:</strong> Beregner hazard ratios og kan justere for flere variable.</p>
+
+<h3>Univariat Cox regression:</h3>
+
+<pre>
+cox_model <- coxph(Surv(OS, Mors) ~ Factor0, data = surv_data)
+summary(cox_model)
+
+# Vigtige output:
+# - coef: koefficient
+# - exp(coef): Hazard Ratio (HR)
+# - p-value
+# - 95% CI for HR
+</pre>
+
+<h3>Multivariat Cox regression:</h3>
+
+<pre>
+# Justerer for flere faktorer
+cox_multi <- coxph(Surv(OS, Mors) ~ Factor0 + Factor1 + Factor2,
+                   data = surv_data)
+summary(cox_multi)
+</pre>
+
+<div class="tip">
+<strong>Fortolkning af Hazard Ratio:</strong>
+<ul>
+<li>HR = 1: Ingen forskel</li>
+<li>HR > 1: Øget risiko for event (fx død)</li>
+<li>HR < 1: Beskyttende effekt</li>
+</ul>
+<p><strong>Eksempel:</strong> HR = 2.0 betyder 2× højere risiko for død.</p>
+</div>
+
+<hr>
+
+<h2>11. Quick Reference - Oversigt</h2>
+
+<table>
+<tr><th>Analyse</th><th>R Kommando</th><th>Hvornår</th></tr>
+<tr><td>Gennemsnit</td><td><code>mean(x)</code></td><td>Deskriptiv statistik</td></tr>
+<tr><td>Median</td><td><code>median(x)</code></td><td>Deskriptiv (robut)</td></tr>
+<tr><td>Standardafvigelse</td><td><code>sd(x)</code></td><td>Spredning i data</td></tr>
+<tr><td>Konfidensinterval</td><td><code>t.test(x)</code></td><td>Præcision af estimat</td></tr>
+<tr><td>T-test</td><td><code>t.test(x ~ group)</code></td><td>Sammenlign 2 gennemsnit</td></tr>
+<tr><td>Chi-square</td><td><code>chisq.test(table(x,y))</code></td><td>2×2 tabeller (n≥10)</td></tr>
+<tr><td>Fisher's exact</td><td><code>fisher.test(table(x,y))</code></td><td>2×2 tabeller (n<10)</td></tr>
+<tr><td>Binomial test</td><td><code>binom.test(k, n, p)</code></td><td>Test proportion</td></tr>
+<tr><td>Kaplan-Meier</td><td><code>survfit(Surv(t,e) ~ g)</code></td><td>Overlevelseskurver</td></tr>
+<tr><td>Log-rank test</td><td><code>survdiff(Surv(t,e) ~ g)</code></td><td>Sammenlign kurver</td></tr>
+<tr><td>Cox regression</td><td><code>coxph(Surv(t,e) ~ x)</code></td><td>Hazard ratios</td></tr>
+</table>
+
+<hr>
+
+<h2>12. Eksempel Workflow</h2>
+
+<pre>
+# 1. Indlæs data
+library(readxl)
+library(survival)
+library(survminer)
+
+data <- read_excel("03_Survival.xlsx")
+
+# 2. Tjek data
+head(data)
+summary(data)
+
+# 3. Kaplan-Meier kurve
+km <- survfit(Surv(OS, Event) ~ Treatment, data = data)
+
+# 4. Plot med p-værdi
+ggsurvplot(km, data = data, pval = TRUE, risk.table = TRUE)
+
+# 5. Log-rank test (eksplicit)
+survdiff(Surv(OS, Event) ~ Treatment, data = data)
+
+# 6. Cox regression for hazard ratio
+cox <- coxph(Surv(OS, Event) ~ Treatment, data = data)
+summary(cox)
+</pre>
+
+<hr>
+
+<p><strong>Lavet til FSK Forskningstræning 2025</strong></p>
+<p>Åbn denne fil i Word: Højreklik → Åbn med → Microsoft Word</p>
+
+</body>
+</html>
