@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Praktisk Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-1/4 bg-gray-800 text-white p-4">
+            <h2 class="text-2xl font-bold mb-4">AI Guide</h2>
+            <ul>
+                <li class="mb-2"><a href="#prompt-skabeloner" class="hover:text-gray-300">Prompt Skabeloner</a></li>
+                <li class="mb-2"><a href="#gode-praksis-principper" class="hover:text-gray-300">Gode Praksis Principper</a></li>
+                <li class="mb-2"><a href="#verificering" class="hover:text-gray-300">Verificering</a></li>
+                <li class="mb-2"><a href="#almindelige-ai-fejl" class="hover:text-gray-300">Almindelige AI-Fejl</a></li>
+                <li class="mb-2"><a href="#selvlaering" class="hover:text-gray-300">Selvlærings-Teknikker</a></li>
+                <li class="mb-2"><a href="#hurtig-reference" class="hover:text-gray-300">Hurtig Reference</a></li>
+                <li class="mb-2"><a href="#yderligere-ressourcer" class="hover:text-gray-300">Yderligere Ressourcer</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="w-3/4 p-8">
+            <div id="prompt-skabeloner">
+                <h1 class="text-3xl font-bold mb-4">Prompt Skabeloner</h1>
+                <p class="mb-4">Kopier og tilpas disse skabeloner til dine behov:</p>
+
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Lær et Koncept</h3>
+                    <div class="bg-gray-200 p-4 rounded">
+                        <p>Jeg er [læge/forsker i X] og skal lære om [koncept].</p>
+                        <br>
+                        <p>Forklar:</p>
+                        <ol class="list-decimal list-inside">
+                            <li>Hvad er [koncept] i simple termer?</li>
+                            <li>Hvorfor bruger vi det i medicinsk forskning?</li>
+                            <li>Giv et klinisk eksempel med [dit område]</li>
+                            <li>Hvad er de 3 vigtigste ting at huske?</li>
+                        </ol>
+                        <br>
+                        <p>Brug ikke for meget matematik - fokusér på forståelse.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Få Hjælp til Kode</h3>
+                    <div class="bg-gray-200 p-4 rounded">
+                        <p>Jeg arbejder i [STATA/SPSS/R] og skal [specifik opgave].</p>
+                        <br>
+                        <p>Mit data:</p>
+                        <ul class="list-disc list-inside">
+                            <li>[beskriv variabler]</li>
+                            <li>[sample size]</li>
+                            <li>[data struktur]</li>
+                        </ul>
+                        <br>
+                        <p>Jeg har brug for kode til at:</p>
+                        <ol class="list-decimal list-inside">
+                            <li>[opgave 1]</li>
+                            <li>[opgave 2]</li>
+                        </ol>
+                        <br>
+                        <p>Kommenter koden så jeg forstår hvad der sker.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Fejlfinding</h3>
+                    <div class="bg-gray-200 p-4 rounded">
+                        <p>Jeg kører følgende kode i [program]:</p>
+                        <br>
+                        <p>[indsæt din kode]</p>
+                        <br>
+                        <p>Jeg får fejl:</p>
+                        <p>[indsæt fejlmeddelelse]</p>
+                        <br>
+                        <p>Hvad gør jeg forkert og hvordan fikser jeg det?</p>
+                        <br>
+                        <p>Mit data struktur er: [beskriv kort]</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Tolkning af Output</h3>
+                    <div class="bg-gray-200 p-4 rounded">
+                        <p>Jeg har kørt [type analyse] og fået følgende output:</p>
+                        <br>
+                        <p>[indsæt relevant output]</p>
+                        <br>
+                        <p>Hjælp mig fortolke:</p>
+                        <ol class="list-decimal list-inside">
+                            <li>Hvad betyder tallene konkret?</li>
+                            <li>Hvordan beskriver jeg dette i en artikel?</li>
+                            <li>Er der noget der ser mærkeligt ud?</li>
+                            <li>Hvilke advarsler skal jeg være opmærksom på?</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Selvtest</h3>
+                    <div class="bg-gray-200 p-4 rounded">
+                        <p>Jeg har lige læret om [emne].</p>
+                        <br>
+                        <p>Giv mig 5 kliniske scenarier hvor jeg skal beslutte [valg].</p>
+                        <br>
+                        <p>Giv mig ét scenarie ad gangen. Jeg svarer først, så giver du feedback og forklarer hvorfor.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gode-praksis-principper" class="mt-8">
+                <h1 class="text-3xl font-bold mb-4">Gode Praksis Principper</h1>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Vær Specifik</h3>
+                    <p class="text-red-500">Dårligt: "Hjælp mig med statistik"</p>
+                    <p class="text-green-500">Godt: "Jeg analyserer overlevelsesdata fra 50 lungecancer patienter med survival time, censor status og treatment gruppe. Hvordan laver jeg en Kaplan-Meier kurve i STATA?"</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Giv Kontekst</h3>
+                    <p class="text-red-500">Dårligt: "Forklar t-test"</p>
+                    <p class="text-green-500">Godt: "Jeg er læge og ny til statistik. Jeg har målt blodtryk hos 30 patienter før og efter behandling (samme patienter). Hvilken t-test skal jeg bruge og hvorfor?"</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Bed om Forklaring</h3>
+                    <p class="text-red-500">Dårligt: "Giv mig kode til regression"</p>
+                    <p class="text-green-500">Godt: "Giv mig kode til Cox regression, forklar hvad hver linje gør, og hvordan jeg tolker output (HR, CI, p-værdier)"</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Iterér</h3>
+                    <p>Ikke kun ét spørgsmål</p>
+                    <p class="text-green-500">Stil opfølgende spørgsmål: "Kan du give et eksempel?", "Hvad hvis...", "Hvordan påvirker [X] resultatet?"</p>
+                </div>
+            </div>
+
+            <div id="verificering" class="mt-8">
+                <h1 class="text-3xl font-bold mb-4">Sådan Tjekker du om AI har Ret</h1>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <p class="mb-4">Verificér ALTID AI's svar:</p>
+                    <ul class="list-disc list-inside">
+                        <li class="mb-2"><b class="font-bold">Test på kendt eksempel:</b> Brug data hvor du kender svaret</li>
+                        <li class="mb-2"><b class="font-bold">Kør i små steps:</b> Test hver del af koden separat</li>
+                        <li class="mb-2"><b class="font-bold">Sammenlign kilder:</b> Spørg 2-3 forskellige AI'er - samme svar?</li>
+                        <li class="mb-2"><b class="font-bold">Check med kollega:</b> Vis til erfaren kollega eller vejleder</li>
+                        <li class="mb-2"><b class="font-bold">Spørg AI kritisk:</b> "Kan dette være forkert? Hvad har du antaget?"</li>
+                        <li class="mb-2"><b class="font-bold">Tjek dokumentation:</b> Læs i lærebog eller officiel dokumentation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="almindelige-ai-fejl" class="mt-8">
+                <h1 class="text-3xl font-bold mb-4">Almindelige AI-Fejl</h1>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <ul class="list-disc list-inside">
+                        <li class="mb-2"><b class="font-bold text-red-500">⚠️ Forældede kommandoer:</b> AI trænet på gammel data - tjek at kommandoer virker i din version</li>
+                        <li class="mb-2"><b class="font-bold text-red-500">⚠️ Hallucinations:</b> AI opfinder funktioner/pakker der ikke eksisterer - verificér altid!</li>
+                        <li class="mb-2"><b class="font-bold text-red-500">⚠️ Forkerte antagelser:</b> AI antager normal fordeling, independence, ingen missing data</li>
+                        <li class="mb-2"><b class="font-bold text-red-500">⚠️ For komplekst:</b> AI foreslår avanceret metode når simpel metode er bedre</li>
+                        <li class="mb-2"><b class="font-bold text-red-500">⚠️ Misforstår kontekst:</b> Forveksler medicinsk terminologi eller klinisk betydning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="selvlaering" class="mt-8">
+                <h1 class="text-3xl font-bold mb-4">Selvlærings-Teknikker med AI</h1>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Teknik 1: Få øvelsesopgaver</h3>
+                    <p><b class="font-bold">Prompt:</b> "Jeg har lige læret om t-tests. Giv mig 5 forskellige kliniske scenarier og bed mig beslutte om jeg skal bruge paired eller unpaired t-test. Giv mig ét scenarie ad gangen. Jeg svarer først, så giver du feedback."</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Teknik 2: Quiz dig selv</h3>
+                    <p><b class="font-bold">Prompt:</b> "Quiz mig i fortolkning af p-værdier og konfidensintervaller. Giv mig scenarier med resultater. Jeg fortolker dem, og du retter mig hvis jeg tager fejl."</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Teknik 3: "Lær mig tilbage"</h3>
+                    <p><b class="font-bold">Prompt:</b> "Jeg har lige læst om Cox regression. Jeg vil forklare hvad jeg har forstået. Lyt og ret mig hvis jeg siger noget forkert: [din forklaring]. Hvad fik jeg rigtigt? Hvad skal jeg forstå bedre?"</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Teknik 4: "Fang fejlen"</h3>
+                    <p><b class="font-bold">Prompt:</b> "Jeg beskriver et studiedesign og analyse. Find alle statistiske problemer: [beskriv studie med bevidste fejl]. Hvilke problemer ser du?"</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow mb-4">
+                    <h3 class="text-xl font-bold mb-2">Teknik 5: Gradvist sværere</h3>
+                    <p><b class="font-bold">Prompt:</b> "Jeg forstår nu [basis koncept]. Giv mig et lidt sværere eksempel der bygger videre på dette. Lad os gradvist øge kompleksiteten."</p>
+                </div>
+            </div>
+
+            <div id="hurtig-reference" class="mt-8">
+                <h1 class="text-3xl font-bold mb-4">Hurtig Reference - Kopier Disse Prompts</h1>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="p-2 text-left">Brug</th>
+                                <th class="p-2 text-left">Prompt skabelon</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-2 font-bold">Forklaring</td>
+                                <td class="p-2">"Jeg er læge og ny til [emne]. Forklar [koncept] simpelt med klinisk eksempel."</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-bold">Kode</td>
+                                <td class="p-2">"Generér [STATA/R/SPSS] kode til [opgave]. Mit data: [beskriv]. Kommenter koden."</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-bold">Fejl</td>
+                                <td class="p-2">"Jeg får fejl: [fejlmeddelelse]. Min kode: [indsæt]. Hvad er galt?"</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-bold">Tolkning</td>
+                                <td class="p-2">"Jeg fik output: [indsæt]. Forklar hvad det betyder klinisk og hvordan jeg beskriver det."</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-bold">Sammenligning</td>
+                                <td class="p-2">"Hvad er forskellen mellem [metode A] og [metode B]? Hvornår bruger jeg hvad?"</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="p-2 font-bold">Selvtest</td>
+                                <td class="p-2">"Quiz mig i [emne]. Giv ét spørgsmål ad gangen. Jeg svarer først."</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-bold">Verificering</td>
+                                <td class="p-2">"Kan din forklaring/kode være forkert? Hvad er potentielle problemer?"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="yderligere-ressourcer" class="mt-8">
+                <h1 class="text-3xl font-bold mb-4">Yderligere Ressourcer</h1>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-2">Lær mere om prompting:</h3>
+                    <ul class="list-disc list-inside">
+                        <li><a href="http://learnprompting.org" target="_blank" class="text-blue-500 hover:underline">Learn Prompting</a></li>
+                        <li><a href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank" class="text-blue-500 hover:underline">OpenAI Prompt Guide</a></li>
+                    </ul>
+                    <h3 class="text-xl font-bold mt-4 mb-2">Statistik ressourcer:</h3>
+                    <ul class="list-disc list-inside">
+                        <li><a href="https://stats.idre.ucla.edu" target="_blank" class="text-blue-500 hover:underline">UCLA Statistical Computing</a></li>
+                        <li><a href="https://stackoverflow.com" target="_blank" class="text-blue-500 hover:underline">Stack Overflow (programming questions)</a></li>
+                        <li><a href="https://stats.stackexchange.com" target="_blank" class="text-blue-500 hover:underline">CrossValidated (statistics questions)</a></li>
+                    </ul>
+                    <h3 class="text-xl font-bold mt-4 mb-2">YouTube kanaler:</h3>
+                    <ul class="list-disc list-inside">
+                        <li><a href="https://www.youtube.com/@statquest" target="_blank" class="text-blue-500 hover:underline">StatQuest with Josh Starmer</a></li>
+                        <li><a href="https://www.youtube.com/@MarinStatsLectures" target="_blank" class="text-blue-500 hover:underline">MarinStatsLectures</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
