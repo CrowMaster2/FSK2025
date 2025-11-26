@@ -58,8 +58,30 @@ Din website er nu live! Del URL'en med dine studerende:
 
 Når du vil tilføje eller opdatere filer:
 
-1. Upload de nye filer til dit GitHub repository
-2. GitHub Pages vil automatisk opdatere websiten inden for 1-2 minutter
+### Automatisk generering af index.html
+
+**Vigtigt**: Denne website bruger nu et automatisk build-script til at opdatere index.html!
+
+1. **Tilføj dine nye filer/mapper** til de relevante mapper
+2. **Kør build-scriptet** for at opdatere index.html:
+   ```bash
+   node build-index.js
+   ```
+3. **Upload til GitHub** (både de nye filer OG den opdaterede index.html)
+4. GitHub Pages vil automatisk opdatere websiten inden for 1-2 minutter
+
+**Fordele ved build-scriptet:**
+- Du behøver IKKE manuelt redigere index.html mere
+- Alle nye filer bliver automatisk tilføjet til websiten
+- Mapper organiseres automatisk alfabetisk
+- Korrekte ikoner tildeles baseret på filtype
+- Submappe-struktur bevares automatisk
+
+**Sådan virker det:**
+- Build-scriptet scanner alle mapper i projektet
+- Det ignorerer system-filer (.git, .claude, osv.)
+- Det genererer en frisk index.html med alle dine filer
+- HTML-filer åbnes i ny fane, andre filer downloades
 
 ## Funktioner
 
@@ -72,9 +94,10 @@ Når du vil tilføje eller opdatere filer:
 
 ```
 FSK-2025-Shared/
-├── index.html          (Hovedside)
+├── index.html          (Hovedside - genereres automatisk!)
 ├── styles.css          (Styling)
 ├── script.js           (Interaktivitet)
+├── build-index.js      (Build-script til at generere index.html)
 ├── README.md           (Denne fil)
 ├── Dag_02_opgave_01/   (Opgave mapper)
 ├── Dag_02_opgave_02/
